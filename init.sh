@@ -4,8 +4,8 @@
 if [ ! -d "lib" ]; then
     mkdir lib
 fi
-jarname=`find server/java/target/font-subsetter-*-jar-with-dependencies.jar -type f -printf "%f\n"`;
+jarname=`find server/java/target/font-subsetter-*-jar-with-dependencies.jar`;
 cp $jarname lib/;
 
-(cd node; npm install);
-(cd thrift/gen-nodejs; npm install);
+(cd server/node; npm install);
+(cd server/thrift/gen-nodejs; npm install);
