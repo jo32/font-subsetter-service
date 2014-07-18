@@ -1,0 +1,38 @@
+package com.xiaomi.mif2e.fontSubsetter;
+
+import java.io.File;
+import java.util.List;
+
+import org.apache.thrift.TException;
+
+import com.google.typography.font.sfntly.Font;
+import com.xiaomi.mif2e.fontSubsetter.SubsetterService.Iface;
+
+public class GenSubsetHandler implements Iface {
+
+	public void genSubset(String filePath, String outputDir, String subset,
+			List<FileType> types) throws IOException, TException {
+
+		File fontFile = new File(filePath);
+		try {
+			Font newFont = Util.subset(fontFile, subset);
+			for (FileType type : types) {
+				if (type == FileType.EOT) {
+					File outputFile = new File(outputDir + "ttf.ttf");
+					Util.saveAsTtf(outputFile, newFont);
+				} else if (type == FileType.EOT) {
+					File outputFile = new File(outputDir + "eot.eot");
+					Util.saveAsEot(outputFile, newFont, false);
+				} else if (type == FileType.WOFF) {
+					File outputFile = new File(outputDir + "woff.woff");
+					Util.saveAsWoff(outputFile, newFont);
+				}
+			}
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+			throw new IOException(ExceptionType.IO, e.getMessage());
+		}
+
+	}
+
+}
