@@ -17,7 +17,7 @@ public class GenSubsetHandler implements Iface {
 		try {
 			Font newFont = Util.subset(fontFile, subset);
 			for (FileType type : types) {
-				if (type == FileType.EOT) {
+				if (type == FileType.TTF) {
 					File outputFile = new File(outputDir + "ttf.ttf");
 					Util.saveAsTtf(outputFile, newFont);
 				} else if (type == FileType.EOT) {
