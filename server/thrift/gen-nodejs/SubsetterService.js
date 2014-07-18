@@ -3,8 +3,9 @@
 //
 // DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
 //
+var Thrift = require('thrift').Thrift;
 
-
+var ttypes = require('./subsetter_types');
 //HELPER FUNCTIONS AND STRUCTURES
 
 fontSubsetter.SubsetterService_genSubset_args = function(args) {
@@ -43,21 +44,21 @@ fontSubsetter.SubsetterService_genSubset_args.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.STRING) {
-        this.filePath = input.readString().value;
+        this.filePath = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 2:
       if (ftype == Thrift.Type.STRING) {
-        this.outputDir = input.readString().value;
+        this.outputDir = input.readString();
       } else {
         input.skip(ftype);
       }
       break;
       case 3:
       if (ftype == Thrift.Type.STRING) {
-        this.subset = input.readString().value;
+        this.subset = input.readString();
       } else {
         input.skip(ftype);
       }
@@ -74,7 +75,7 @@ fontSubsetter.SubsetterService_genSubset_args.prototype.read = function(input) {
         for (var _i5 = 0; _i5 < _size0; ++_i5)
         {
           var elem6 = null;
-          elem6 = input.readI32().value;
+          elem6 = input.readI32();
           this.types.push(elem6);
         }
         input.readListEnd();
@@ -129,7 +130,7 @@ fontSubsetter.SubsetterService_genSubset_args.prototype.write = function(output)
 
 fontSubsetter.SubsetterService_genSubset_result = function(args) {
   this.ex = null;
-  if (args instanceof fontSubsetter.IOException) {
+  if (args instanceof ttypes.IOException) {
     this.ex = args;
     return;
   }
@@ -155,7 +156,7 @@ fontSubsetter.SubsetterService_genSubset_result.prototype.read = function(input)
     {
       case 1:
       if (ftype == Thrift.Type.STRUCT) {
-        this.ex = new fontSubsetter.IOException();
+        this.ex = new ttypes.IOException();
         this.ex.read(input);
       } else {
         input.skip(ftype);
@@ -185,46 +186,78 @@ fontSubsetter.SubsetterService_genSubset_result.prototype.write = function(outpu
   return;
 };
 
-fontSubsetter.SubsetterServiceClient = function(input, output) {
-    this.input = input;
-    this.output = (!output) ? input : output;
+fontSubsetter.SubsetterServiceClient = exports.Client = function(output, pClass) {
+    this.output = output;
+    this.pClass = pClass;
     this.seqid = 0;
+    this._reqs = {};
 };
 fontSubsetter.SubsetterServiceClient.prototype = {};
-fontSubsetter.SubsetterServiceClient.prototype.genSubset = function(filePath, outputDir, subset, types) {
+fontSubsetter.SubsetterServiceClient.prototype.genSubset = function(filePath, outputDir, subset, types, callback) {
+  this.seqid += 1;
+  this._reqs[this.seqid] = callback;
   this.send_genSubset(filePath, outputDir, subset, types);
-  this.recv_genSubset();
 };
 
 fontSubsetter.SubsetterServiceClient.prototype.send_genSubset = function(filePath, outputDir, subset, types) {
-  this.output.writeMessageBegin('genSubset', Thrift.MessageType.CALL, this.seqid);
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('genSubset', Thrift.MessageType.CALL, this.seqid);
   var args = new fontSubsetter.SubsetterService_genSubset_args();
   args.filePath = filePath;
   args.outputDir = outputDir;
   args.subset = subset;
   args.types = types;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush();
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
 };
 
-fontSubsetter.SubsetterServiceClient.prototype.recv_genSubset = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
+fontSubsetter.SubsetterServiceClient.prototype.recv_genSubset = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
   if (mtype == Thrift.MessageType.EXCEPTION) {
     var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
   }
   var result = new fontSubsetter.SubsetterService_genSubset_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  result.read(input);
+  input.readMessageEnd();
 
   if (null !== result.ex) {
-    throw result.ex;
+    return callback(result.ex);
   }
-  return;
+  callback(null)
 };
+fontSubsetter.SubsetterServiceProcessor = exports.Processor = function(handler) {
+  this._handler = handler
+}
+fontSubsetter.SubsetterServiceProcessor.prototype.process = function(input, output) {
+  var r = input.readMessageBegin();
+  if (this['process_' + r.fname]) {
+    return this['process_' + r.fname].call(this, r.rseqid, input, output);
+  } else {
+    input.skip(Thrift.Type.STRUCT);
+    input.readMessageEnd();
+    var x = new Thrift.TApplicationException(Thrift.TApplicationExceptionType.UNKNOWN_METHOD, 'Unknown function ' + r.fname);
+    output.writeMessageBegin(r.fname, Thrift.MessageType.Exception, r.rseqid);
+    x.write(output);
+    output.writeMessageEnd();
+    output.flush();
+  }
+}
+
+fontSubsetter.SubsetterServiceProcessor.prototype.process_genSubset = function(seqid, input, output) {
+  var args = new fontSubsetter.SubsetterService_genSubset_args();
+  args.read(input);
+  input.readMessageEnd();
+  this._handler.genSubset(args.filePath, args.outputDir, args.subset, args.types, function (err, result) {
+    var result = new fontSubsetter.SubsetterService_genSubset_result((err != null ? err : {success: result}));
+    output.writeMessageBegin("genSubset", Thrift.MessageType.REPLY, seqid);
+    result.write(output);
+    output.writeMessageEnd();
+    output.flush();
+  })
+}
+

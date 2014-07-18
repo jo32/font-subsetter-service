@@ -3,20 +3,23 @@
 //
 // DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
 //
+var Thrift = require('thrift').Thrift;
 
-
+var ttypes = module.exports = {};
 if (typeof fontSubsetter === 'undefined') {
   fontSubsetter = {};
 }
-fontSubsetter.ExceptionType = {
+ttypes.ExceptionType = {
 'IO' : 0
 };
-fontSubsetter.FileType = {
+ttypes.FileType = {
 'TTF' : 0,
 'WOFF' : 1,
 'EOT' : 2
 };
-fontSubsetter.IOException = function(args) {
+fontSubsetter.IOException = module.exports.IOException = function(args) {
+  Thrift.TException.call(this, "fontSubsetter.IOException")
+  this.name = "fontSubsetter.IOException"
   this.type = null;
   this.why = null;
   if (args) {
@@ -45,14 +48,14 @@ fontSubsetter.IOException.prototype.read = function(input) {
     {
       case 1:
       if (ftype == Thrift.Type.I32) {
-        this.type = input.readI32().value;
+        this.type = input.readI32();
       } else {
         input.skip(ftype);
       }
       break;
       case 2:
       if (ftype == Thrift.Type.STRING) {
-        this.why = input.readString().value;
+        this.why = input.readString();
       } else {
         input.skip(ftype);
       }
