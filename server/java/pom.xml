@@ -35,6 +35,14 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/java</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/../thrift/gen-java</directory>
+			</resource>
+		</resources>
 	</build>
 
 	<properties>
