@@ -186,6 +186,112 @@ fontSubsetter.SubsetterService_genSubset_result.prototype.write = function(outpu
   return;
 };
 
+fontSubsetter.SubsetterService_getFontInfo_args = function(args) {
+  this.filePath = null;
+  if (args) {
+    if (args.filePath !== undefined) {
+      this.filePath = args.filePath;
+    }
+  }
+};
+fontSubsetter.SubsetterService_getFontInfo_args.prototype = {};
+fontSubsetter.SubsetterService_getFontInfo_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.filePath = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+fontSubsetter.SubsetterService_getFontInfo_args.prototype.write = function(output) {
+  output.writeStructBegin('SubsetterService_getFontInfo_args');
+  if (this.filePath !== null && this.filePath !== undefined) {
+    output.writeFieldBegin('filePath', Thrift.Type.STRING, 1);
+    output.writeString(this.filePath);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+fontSubsetter.SubsetterService_getFontInfo_result = function(args) {
+  this.success = null;
+  if (args) {
+    if (args.success !== undefined) {
+      this.success = args.success;
+    }
+  }
+};
+fontSubsetter.SubsetterService_getFontInfo_result.prototype = {};
+fontSubsetter.SubsetterService_getFontInfo_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRING) {
+        this.success = input.readString();
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+fontSubsetter.SubsetterService_getFontInfo_result.prototype.write = function(output) {
+  output.writeStructBegin('SubsetterService_getFontInfo_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
+    output.writeString(this.success);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 fontSubsetter.SubsetterServiceClient = exports.Client = function(output, pClass) {
     this.output = output;
     this.pClass = pClass;
@@ -230,6 +336,40 @@ fontSubsetter.SubsetterServiceClient.prototype.recv_genSubset = function(input,m
   }
   callback(null)
 };
+fontSubsetter.SubsetterServiceClient.prototype.getFontInfo = function(filePath, callback) {
+  this.seqid += 1;
+  this._reqs[this.seqid] = callback;
+  this.send_getFontInfo(filePath);
+};
+
+fontSubsetter.SubsetterServiceClient.prototype.send_getFontInfo = function(filePath) {
+  var output = new this.pClass(this.output);
+  output.writeMessageBegin('getFontInfo', Thrift.MessageType.CALL, this.seqid);
+  var args = new fontSubsetter.SubsetterService_getFontInfo_args();
+  args.filePath = filePath;
+  args.write(output);
+  output.writeMessageEnd();
+  return this.output.flush();
+};
+
+fontSubsetter.SubsetterServiceClient.prototype.recv_getFontInfo = function(input,mtype,rseqid) {
+  var callback = this._reqs[rseqid] || function() {};
+  delete this._reqs[rseqid];
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(input);
+    input.readMessageEnd();
+    return callback(x);
+  }
+  var result = new fontSubsetter.SubsetterService_getFontInfo_result();
+  result.read(input);
+  input.readMessageEnd();
+
+  if (null !== result.success) {
+    return callback(null, result.success);
+  }
+  return callback('getFontInfo failed: unknown result');
+};
 fontSubsetter.SubsetterServiceProcessor = exports.Processor = function(handler) {
   this._handler = handler
 }
@@ -255,6 +395,19 @@ fontSubsetter.SubsetterServiceProcessor.prototype.process_genSubset = function(s
   this._handler.genSubset(args.filePath, args.outputDir, args.subset, args.types, function (err, result) {
     var result = new fontSubsetter.SubsetterService_genSubset_result((err != null ? err : {success: result}));
     output.writeMessageBegin("genSubset", Thrift.MessageType.REPLY, seqid);
+    result.write(output);
+    output.writeMessageEnd();
+    output.flush();
+  })
+}
+
+fontSubsetter.SubsetterServiceProcessor.prototype.process_getFontInfo = function(seqid, input, output) {
+  var args = new fontSubsetter.SubsetterService_getFontInfo_args();
+  args.read(input);
+  input.readMessageEnd();
+  this._handler.getFontInfo(args.filePath, function (err, result) {
+    var result = new fontSubsetter.SubsetterService_getFontInfo_result((err != null ? err : {success: result}));
+    output.writeMessageBegin("getFontInfo", Thrift.MessageType.REPLY, seqid);
     result.write(output);
     output.writeMessageEnd();
     output.flush();

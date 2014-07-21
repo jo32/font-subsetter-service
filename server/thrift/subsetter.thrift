@@ -18,10 +18,6 @@ exception IOException {
 
 service SubsetterService {
 
-    void genSubset(1:string filePath, 2:string outputDir, 3:string subset, 4:list<FileType> types) throws (1:IOException ex)
-}
-
-service FontInfoService {
-
+    void genSubset(1:string filePath, 2:string outputDir, 3:string subset, 4:list<FileType> types) throws (1:IOException ex),
     string getFontInfo(1:string filePath)
 }
