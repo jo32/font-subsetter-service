@@ -20,3 +20,8 @@ service SubsetterService {
 
     void genSubset(1:string filePath, 2:string outputDir, 3:string subset, 4:list<FileType> types) throws (1:IOException ex)
 }
+
+service FontInfoService {
+
+    string getFontInfo(1:string filePath)
+}

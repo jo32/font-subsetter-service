@@ -34,1498 +34,1299 @@ import org.slf4j.LoggerFactory;
 
 public class SubsetterService {
 
-	public interface Iface {
-
-		public void genSubset(String filePath, String outputDir, String subset,
-				List<FileType> types) throws IOException,
-				org.apache.thrift.TException;
-
-	}
-
-	public interface AsyncIface {
-
-		public void genSubset(String filePath, String outputDir, String subset,
-				List<FileType> types,
-				org.apache.thrift.async.AsyncMethodCallback resultHandler)
-				throws org.apache.thrift.TException;
-
-	}
-
-	public static class Client extends org.apache.thrift.TServiceClient
-			implements Iface {
-		public static class Factory implements
-				org.apache.thrift.TServiceClientFactory<Client> {
-			public Factory() {
-			}
-
-			public Client getClient(org.apache.thrift.protocol.TProtocol prot) {
-				return new Client(prot);
-			}
-
-			public Client getClient(org.apache.thrift.protocol.TProtocol iprot,
-					org.apache.thrift.protocol.TProtocol oprot) {
-				return new Client(iprot, oprot);
-			}
-		}
-
-		public Client(org.apache.thrift.protocol.TProtocol prot) {
-			super(prot, prot);
-		}
-
-		public Client(org.apache.thrift.protocol.TProtocol iprot,
-				org.apache.thrift.protocol.TProtocol oprot) {
-			super(iprot, oprot);
-		}
-
-		public void genSubset(String filePath, String outputDir, String subset,
-				List<FileType> types) throws IOException,
-				org.apache.thrift.TException {
-			send_genSubset(filePath, outputDir, subset, types);
-			recv_genSubset();
-		}
-
-		public void send_genSubset(String filePath, String outputDir,
-				String subset, List<FileType> types)
-				throws org.apache.thrift.TException {
-			genSubset_args args = new genSubset_args();
-			args.setFilePath(filePath);
-			args.setOutputDir(outputDir);
-			args.setSubset(subset);
-			args.setTypes(types);
-			sendBase("genSubset", args);
-		}
-
-		public void recv_genSubset() throws IOException,
-				org.apache.thrift.TException {
-			genSubset_result result = new genSubset_result();
-			receiveBase(result, "genSubset");
-			if (result.ex != null) {
-				throw result.ex;
-			}
-			return;
-		}
-
-	}
-
-	public static class AsyncClient extends
-			org.apache.thrift.async.TAsyncClient implements AsyncIface {
-		public static class Factory implements
-				org.apache.thrift.async.TAsyncClientFactory<AsyncClient> {
-			private org.apache.thrift.async.TAsyncClientManager clientManager;
-			private org.apache.thrift.protocol.TProtocolFactory protocolFactory;
-
-			public Factory(
-					org.apache.thrift.async.TAsyncClientManager clientManager,
-					org.apache.thrift.protocol.TProtocolFactory protocolFactory) {
-				this.clientManager = clientManager;
-				this.protocolFactory = protocolFactory;
-			}
-
-			public AsyncClient getAsyncClient(
-					org.apache.thrift.transport.TNonblockingTransport transport) {
-				return new AsyncClient(protocolFactory, clientManager,
-						transport);
-			}
-		}
-
-		public AsyncClient(
-				org.apache.thrift.protocol.TProtocolFactory protocolFactory,
-				org.apache.thrift.async.TAsyncClientManager clientManager,
-				org.apache.thrift.transport.TNonblockingTransport transport) {
-			super(protocolFactory, clientManager, transport);
-		}
-
-		public void genSubset(String filePath, String outputDir, String subset,
-				List<FileType> types,
-				org.apache.thrift.async.AsyncMethodCallback resultHandler)
-				throws org.apache.thrift.TException {
-			checkReady();
-			genSubset_call method_call = new genSubset_call(filePath,
-					outputDir, subset, types, resultHandler, this,
-					___protocolFactory, ___transport);
-			this.___currentMethod = method_call;
-			___manager.call(method_call);
-		}
-
-		public static class genSubset_call extends
-				org.apache.thrift.async.TAsyncMethodCall {
-			private String filePath;
-			private String outputDir;
-			private String subset;
-			private List<FileType> types;
-
-			public genSubset_call(
-					String filePath,
-					String outputDir,
-					String subset,
-					List<FileType> types,
-					org.apache.thrift.async.AsyncMethodCallback resultHandler,
-					org.apache.thrift.async.TAsyncClient client,
-					org.apache.thrift.protocol.TProtocolFactory protocolFactory,
-					org.apache.thrift.transport.TNonblockingTransport transport)
-					throws org.apache.thrift.TException {
-				super(client, protocolFactory, transport, resultHandler, false);
-				this.filePath = filePath;
-				this.outputDir = outputDir;
-				this.subset = subset;
-				this.types = types;
-			}
-
-			public void write_args(org.apache.thrift.protocol.TProtocol prot)
-					throws org.apache.thrift.TException {
-				prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage(
-						"genSubset",
-						org.apache.thrift.protocol.TMessageType.CALL, 0));
-				genSubset_args args = new genSubset_args();
-				args.setFilePath(filePath);
-				args.setOutputDir(outputDir);
-				args.setSubset(subset);
-				args.setTypes(types);
-				args.write(prot);
-				prot.writeMessageEnd();
-			}
-
-			public void getResult() throws IOException,
-					org.apache.thrift.TException {
-				if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-					throw new IllegalStateException("Method call not finished!");
-				}
-				org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(
-						getFrameBuffer().array());
-				org.apache.thrift.protocol.TProtocol prot = client
-						.getProtocolFactory().getProtocol(memoryTransport);
-				(new Client(prot)).recv_genSubset();
-			}
-		}
-
-	}
-
-	public static class Processor<I extends Iface> extends
-			org.apache.thrift.TBaseProcessor<I> implements
-			org.apache.thrift.TProcessor {
-		private static final Logger LOGGER = LoggerFactory
-				.getLogger(Processor.class.getName());
-
-		public Processor(I iface) {
-			super(
-					iface,
-					getProcessMap(new HashMap<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>>()));
-		}
-
-		protected Processor(
-				I iface,
-				Map<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> processMap) {
-			super(iface, getProcessMap(processMap));
-		}
-
-		private static <I extends Iface> Map<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> getProcessMap(
-				Map<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> processMap) {
-			processMap.put("genSubset", new genSubset());
-			return processMap;
-		}
-
-		public static class genSubset<I extends Iface> extends
-				org.apache.thrift.ProcessFunction<I, genSubset_args> {
-			public genSubset() {
-				super("genSubset");
-			}
-
-			public genSubset_args getEmptyArgsInstance() {
-				return new genSubset_args();
-			}
-
-			protected boolean isOneway() {
-				return false;
-			}
-
-			public genSubset_result getResult(I iface, genSubset_args args)
-					throws org.apache.thrift.TException {
-				genSubset_result result = new genSubset_result();
-				try {
-					iface.genSubset(args.filePath, args.outputDir, args.subset,
-							args.types);
-				} catch (IOException ex) {
-					result.ex = ex;
-				}
-				return result;
-			}
-		}
-
-	}
-
-	public static class AsyncProcessor<I extends AsyncIface> extends
-			org.apache.thrift.TBaseAsyncProcessor<I> {
-		private static final Logger LOGGER = LoggerFactory
-				.getLogger(AsyncProcessor.class.getName());
-
-		public AsyncProcessor(I iface) {
-			super(
-					iface,
-					getProcessMap(new HashMap<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>>()));
-		}
-
-		protected AsyncProcessor(
-				I iface,
-				Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> processMap) {
-			super(iface, getProcessMap(processMap));
-		}
-
-		private static <I extends AsyncIface> Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> getProcessMap(
-				Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> processMap) {
-			processMap.put("genSubset", new genSubset());
-			return processMap;
-		}
-
-		public static class genSubset<I extends AsyncIface> extends
-				org.apache.thrift.AsyncProcessFunction<I, genSubset_args, Void> {
-			public genSubset() {
-				super("genSubset");
-			}
-
-			public genSubset_args getEmptyArgsInstance() {
-				return new genSubset_args();
-			}
-
-			public AsyncMethodCallback<Void> getResultHandler(
-					final AsyncFrameBuffer fb, final int seqid) {
-				final org.apache.thrift.AsyncProcessFunction fcall = this;
-				return new AsyncMethodCallback<Void>() {
-					public void onComplete(Void o) {
-						genSubset_result result = new genSubset_result();
-						try {
-							fcall.sendResponse(
-									fb,
-									result,
-									org.apache.thrift.protocol.TMessageType.REPLY,
-									seqid);
-							return;
-						} catch (Exception e) {
-							LOGGER.error(
-									"Exception writing to internal frame buffer",
-									e);
-						}
-						fb.close();
-					}
-
-					public void onError(Exception e) {
-						byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-						org.apache.thrift.TBase msg;
-						genSubset_result result = new genSubset_result();
-						if (e instanceof IOException) {
-							result.ex = (IOException) e;
-							result.setExIsSet(true);
-							msg = result;
-						} else {
-							msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-							msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
-									org.apache.thrift.TApplicationException.INTERNAL_ERROR,
-									e.getMessage());
-						}
-						try {
-							fcall.sendResponse(fb, msg, msgType, seqid);
-							return;
-						} catch (Exception ex) {
-							LOGGER.error(
-									"Exception writing to internal frame buffer",
-									ex);
-						}
-						fb.close();
-					}
-				};
-			}
-
-			protected boolean isOneway() {
-				return false;
-			}
-
-			public void start(
-					I iface,
-					genSubset_args args,
-					org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler)
-					throws TException {
-				iface.genSubset(args.filePath, args.outputDir, args.subset,
-						args.types, resultHandler);
-			}
-		}
-
-	}
-
-	public static class genSubset_args implements
-			org.apache.thrift.TBase<genSubset_args, genSubset_args._Fields>,
-			java.io.Serializable, Cloneable, Comparable<genSubset_args> {
-		private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-				"genSubset_args");
-
-		private static final org.apache.thrift.protocol.TField FILE_PATH_FIELD_DESC = new org.apache.thrift.protocol.TField(
-				"filePath", org.apache.thrift.protocol.TType.STRING, (short) 1);
-		private static final org.apache.thrift.protocol.TField OUTPUT_DIR_FIELD_DESC = new org.apache.thrift.protocol.TField(
-				"outputDir", org.apache.thrift.protocol.TType.STRING, (short) 2);
-		private static final org.apache.thrift.protocol.TField SUBSET_FIELD_DESC = new org.apache.thrift.protocol.TField(
-				"subset", org.apache.thrift.protocol.TType.STRING, (short) 3);
-		private static final org.apache.thrift.protocol.TField TYPES_FIELD_DESC = new org.apache.thrift.protocol.TField(
-				"types", org.apache.thrift.protocol.TType.LIST, (short) 4);
-
-		private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
-		static {
-			schemes.put(StandardScheme.class,
-					new genSubset_argsStandardSchemeFactory());
-			schemes.put(TupleScheme.class,
-					new genSubset_argsTupleSchemeFactory());
-		}
-
-		public String filePath; // required
-		public String outputDir; // required
-		public String subset; // required
-		public List<FileType> types; // required
-
-		/**
-		 * The set of fields this struct contains, along with convenience
-		 * methods for finding and manipulating them.
-		 */
-		public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-			FILE_PATH((short) 1, "filePath"), OUTPUT_DIR((short) 2, "outputDir"), SUBSET(
-					(short) 3, "subset"), TYPES((short) 4, "types");
-
-			private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-
-			static {
-				for (_Fields field : EnumSet.allOf(_Fields.class)) {
-					byName.put(field.getFieldName(), field);
-				}
-			}
-
-			/**
-			 * Find the _Fields constant that matches fieldId, or null if its
-			 * not found.
-			 */
-			public static _Fields findByThriftId(int fieldId) {
-				switch (fieldId) {
-				case 1: // FILE_PATH
-					return FILE_PATH;
-				case 2: // OUTPUT_DIR
-					return OUTPUT_DIR;
-				case 3: // SUBSET
-					return SUBSET;
-				case 4: // TYPES
-					return TYPES;
-				default:
-					return null;
-				}
-			}
-
-			/**
-			 * Find the _Fields constant that matches fieldId, throwing an
-			 * exception if it is not found.
-			 */
-			public static _Fields findByThriftIdOrThrow(int fieldId) {
-				_Fields fields = findByThriftId(fieldId);
-				if (fields == null)
-					throw new IllegalArgumentException("Field " + fieldId
-							+ " doesn't exist!");
-				return fields;
-			}
-
-			/**
-			 * Find the _Fields constant that matches name, or null if its not
-			 * found.
-			 */
-			public static _Fields findByName(String name) {
-				return byName.get(name);
-			}
-
-			private final short _thriftId;
-			private final String _fieldName;
-
-			_Fields(short thriftId, String fieldName) {
-				_thriftId = thriftId;
-				_fieldName = fieldName;
-			}
-
-			public short getThriftFieldId() {
-				return _thriftId;
-			}
-
-			public String getFieldName() {
-				return _fieldName;
-			}
-		}
-
-		// isset id assignments
-		public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-		static {
-			Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
-					_Fields.class);
-			tmpMap.put(_Fields.FILE_PATH,
-					new org.apache.thrift.meta_data.FieldMetaData("filePath",
-							org.apache.thrift.TFieldRequirementType.DEFAULT,
-							new org.apache.thrift.meta_data.FieldValueMetaData(
-									org.apache.thrift.protocol.TType.STRING)));
-			tmpMap.put(_Fields.OUTPUT_DIR,
-					new org.apache.thrift.meta_data.FieldMetaData("outputDir",
-							org.apache.thrift.TFieldRequirementType.DEFAULT,
-							new org.apache.thrift.meta_data.FieldValueMetaData(
-									org.apache.thrift.protocol.TType.STRING)));
-			tmpMap.put(_Fields.SUBSET,
-					new org.apache.thrift.meta_data.FieldMetaData("subset",
-							org.apache.thrift.TFieldRequirementType.DEFAULT,
-							new org.apache.thrift.meta_data.FieldValueMetaData(
-									org.apache.thrift.protocol.TType.STRING)));
-			tmpMap.put(
-					_Fields.TYPES,
-					new org.apache.thrift.meta_data.FieldMetaData(
-							"types",
-							org.apache.thrift.TFieldRequirementType.DEFAULT,
-							new org.apache.thrift.meta_data.ListMetaData(
-									org.apache.thrift.protocol.TType.LIST,
-									new org.apache.thrift.meta_data.EnumMetaData(
-											org.apache.thrift.protocol.TType.ENUM,
-											FileType.class))));
-			metaDataMap = Collections.unmodifiableMap(tmpMap);
-			org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(
-					genSubset_args.class, metaDataMap);
-		}
-
-		public genSubset_args() {
-		}
-
-		public genSubset_args(String filePath, String outputDir, String subset,
-				List<FileType> types) {
-			this();
-			this.filePath = filePath;
-			this.outputDir = outputDir;
-			this.subset = subset;
-			this.types = types;
-		}
-
-		/**
-		 * Performs a deep copy on <i>other</i>.
-		 */
-		public genSubset_args(genSubset_args other) {
-			if (other.isSetFilePath()) {
-				this.filePath = other.filePath;
-			}
-			if (other.isSetOutputDir()) {
-				this.outputDir = other.outputDir;
-			}
-			if (other.isSetSubset()) {
-				this.subset = other.subset;
-			}
-			if (other.isSetTypes()) {
-				List<FileType> __this__types = new ArrayList<FileType>(
-						other.types.size());
-				for (FileType other_element : other.types) {
-					__this__types.add(other_element);
-				}
-				this.types = __this__types;
-			}
-		}
-
-		public genSubset_args deepCopy() {
-			return new genSubset_args(this);
-		}
-
-		public void clear() {
-			this.filePath = null;
-			this.outputDir = null;
-			this.subset = null;
-			this.types = null;
-		}
-
-		public String getFilePath() {
-			return this.filePath;
-		}
-
-		public genSubset_args setFilePath(String filePath) {
-			this.filePath = filePath;
-			return this;
-		}
-
-		public void unsetFilePath() {
-			this.filePath = null;
-		}
-
-		/**
-		 * Returns true if field filePath is set (has been assigned a value) and
-		 * false otherwise
-		 */
-		public boolean isSetFilePath() {
-			return this.filePath != null;
-		}
-
-		public void setFilePathIsSet(boolean value) {
-			if (!value) {
-				this.filePath = null;
-			}
-		}
-
-		public String getOutputDir() {
-			return this.outputDir;
-		}
-
-		public genSubset_args setOutputDir(String outputDir) {
-			this.outputDir = outputDir;
-			return this;
-		}
-
-		public void unsetOutputDir() {
-			this.outputDir = null;
-		}
-
-		/**
-		 * Returns true if field outputDir is set (has been assigned a value)
-		 * and false otherwise
-		 */
-		public boolean isSetOutputDir() {
-			return this.outputDir != null;
-		}
-
-		public void setOutputDirIsSet(boolean value) {
-			if (!value) {
-				this.outputDir = null;
-			}
-		}
-
-		public String getSubset() {
-			return this.subset;
-		}
-
-		public genSubset_args setSubset(String subset) {
-			this.subset = subset;
-			return this;
-		}
-
-		public void unsetSubset() {
-			this.subset = null;
-		}
-
-		/**
-		 * Returns true if field subset is set (has been assigned a value) and
-		 * false otherwise
-		 */
-		public boolean isSetSubset() {
-			return this.subset != null;
-		}
-
-		public void setSubsetIsSet(boolean value) {
-			if (!value) {
-				this.subset = null;
-			}
-		}
-
-		public int getTypesSize() {
-			return (this.types == null) ? 0 : this.types.size();
-		}
-
-		public java.util.Iterator<FileType> getTypesIterator() {
-			return (this.types == null) ? null : this.types.iterator();
-		}
-
-		public void addToTypes(FileType elem) {
-			if (this.types == null) {
-				this.types = new ArrayList<FileType>();
-			}
-			this.types.add(elem);
-		}
-
-		public List<FileType> getTypes() {
-			return this.types;
-		}
-
-		public genSubset_args setTypes(List<FileType> types) {
-			this.types = types;
-			return this;
-		}
-
-		public void unsetTypes() {
-			this.types = null;
-		}
-
-		/**
-		 * Returns true if field types is set (has been assigned a value) and
-		 * false otherwise
-		 */
-		public boolean isSetTypes() {
-			return this.types != null;
-		}
-
-		public void setTypesIsSet(boolean value) {
-			if (!value) {
-				this.types = null;
-			}
-		}
-
-		public void setFieldValue(_Fields field, Object value) {
-			switch (field) {
-			case FILE_PATH:
-				if (value == null) {
-					unsetFilePath();
-				} else {
-					setFilePath((String) value);
-				}
-				break;
-
-			case OUTPUT_DIR:
-				if (value == null) {
-					unsetOutputDir();
-				} else {
-					setOutputDir((String) value);
-				}
-				break;
-
-			case SUBSET:
-				if (value == null) {
-					unsetSubset();
-				} else {
-					setSubset((String) value);
-				}
-				break;
-
-			case TYPES:
-				if (value == null) {
-					unsetTypes();
-				} else {
-					setTypes((List<FileType>) value);
-				}
-				break;
-
-			}
-		}
-
-		public Object getFieldValue(_Fields field) {
-			switch (field) {
-			case FILE_PATH:
-				return getFilePath();
-
-			case OUTPUT_DIR:
-				return getOutputDir();
-
-			case SUBSET:
-				return getSubset();
-
-			case TYPES:
-				return getTypes();
-
-			}
-			throw new IllegalStateException();
-		}
-
-		/**
-		 * Returns true if field corresponding to fieldID is set (has been
-		 * assigned a value) and false otherwise
-		 */
-		public boolean isSet(_Fields field) {
-			if (field == null) {
-				throw new IllegalArgumentException();
-			}
-
-			switch (field) {
-			case FILE_PATH:
-				return isSetFilePath();
-			case OUTPUT_DIR:
-				return isSetOutputDir();
-			case SUBSET:
-				return isSetSubset();
-			case TYPES:
-				return isSetTypes();
-			}
-			throw new IllegalStateException();
-		}
-
-		@Override
-		public boolean equals(Object that) {
-			if (that == null)
-				return false;
-			if (that instanceof genSubset_args)
-				return this.equals((genSubset_args) that);
-			return false;
-		}
-
-		public boolean equals(genSubset_args that) {
-			if (that == null)
-				return false;
-
-			boolean this_present_filePath = true && this.isSetFilePath();
-			boolean that_present_filePath = true && that.isSetFilePath();
-			if (this_present_filePath || that_present_filePath) {
-				if (!(this_present_filePath && that_present_filePath))
-					return false;
-				if (!this.filePath.equals(that.filePath))
-					return false;
-			}
-
-			boolean this_present_outputDir = true && this.isSetOutputDir();
-			boolean that_present_outputDir = true && that.isSetOutputDir();
-			if (this_present_outputDir || that_present_outputDir) {
-				if (!(this_present_outputDir && that_present_outputDir))
-					return false;
-				if (!this.outputDir.equals(that.outputDir))
-					return false;
-			}
-
-			boolean this_present_subset = true && this.isSetSubset();
-			boolean that_present_subset = true && that.isSetSubset();
-			if (this_present_subset || that_present_subset) {
-				if (!(this_present_subset && that_present_subset))
-					return false;
-				if (!this.subset.equals(that.subset))
-					return false;
-			}
-
-			boolean this_present_types = true && this.isSetTypes();
-			boolean that_present_types = true && that.isSetTypes();
-			if (this_present_types || that_present_types) {
-				if (!(this_present_types && that_present_types))
-					return false;
-				if (!this.types.equals(that.types))
-					return false;
-			}
-
-			return true;
-		}
-
-		@Override
-		public int hashCode() {
-			return 0;
-		}
-
-		public int compareTo(genSubset_args other) {
-			if (!getClass().equals(other.getClass())) {
-				return getClass().getName().compareTo(
-						other.getClass().getName());
-			}
-
-			int lastComparison = 0;
-
-			lastComparison = Boolean.valueOf(isSetFilePath()).compareTo(
-					other.isSetFilePath());
-			if (lastComparison != 0) {
-				return lastComparison;
-			}
-			if (isSetFilePath()) {
-				lastComparison = org.apache.thrift.TBaseHelper.compareTo(
-						this.filePath, other.filePath);
-				if (lastComparison != 0) {
-					return lastComparison;
-				}
-			}
-			lastComparison = Boolean.valueOf(isSetOutputDir()).compareTo(
-					other.isSetOutputDir());
-			if (lastComparison != 0) {
-				return lastComparison;
-			}
-			if (isSetOutputDir()) {
-				lastComparison = org.apache.thrift.TBaseHelper.compareTo(
-						this.outputDir, other.outputDir);
-				if (lastComparison != 0) {
-					return lastComparison;
-				}
-			}
-			lastComparison = Boolean.valueOf(isSetSubset()).compareTo(
-					other.isSetSubset());
-			if (lastComparison != 0) {
-				return lastComparison;
-			}
-			if (isSetSubset()) {
-				lastComparison = org.apache.thrift.TBaseHelper.compareTo(
-						this.subset, other.subset);
-				if (lastComparison != 0) {
-					return lastComparison;
-				}
-			}
-			lastComparison = Boolean.valueOf(isSetTypes()).compareTo(
-					other.isSetTypes());
-			if (lastComparison != 0) {
-				return lastComparison;
-			}
-			if (isSetTypes()) {
-				lastComparison = org.apache.thrift.TBaseHelper.compareTo(
-						this.types, other.types);
-				if (lastComparison != 0) {
-					return lastComparison;
-				}
-			}
-			return 0;
-		}
-
-		public _Fields fieldForId(int fieldId) {
-			return _Fields.findByThriftId(fieldId);
-		}
-
-		public void read(org.apache.thrift.protocol.TProtocol iprot)
-				throws org.apache.thrift.TException {
-			schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
-		}
-
-		public void write(org.apache.thrift.protocol.TProtocol oprot)
-				throws org.apache.thrift.TException {
-			schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
-		}
-
-		@Override
-		public String toString() {
-			StringBuilder sb = new StringBuilder("genSubset_args(");
-			boolean first = true;
-
-			sb.append("filePath:");
-			if (this.filePath == null) {
-				sb.append("null");
-			} else {
-				sb.append(this.filePath);
-			}
-			first = false;
-			if (!first)
-				sb.append(", ");
-			sb.append("outputDir:");
-			if (this.outputDir == null) {
-				sb.append("null");
-			} else {
-				sb.append(this.outputDir);
-			}
-			first = false;
-			if (!first)
-				sb.append(", ");
-			sb.append("subset:");
-			if (this.subset == null) {
-				sb.append("null");
-			} else {
-				sb.append(this.subset);
-			}
-			first = false;
-			if (!first)
-				sb.append(", ");
-			sb.append("types:");
-			if (this.types == null) {
-				sb.append("null");
-			} else {
-				sb.append(this.types);
-			}
-			first = false;
-			sb.append(")");
-			return sb.toString();
-		}
-
-		public void validate() throws org.apache.thrift.TException {
-			// check for required fields
-			// check for sub-struct validity
-		}
-
-		private void writeObject(java.io.ObjectOutputStream out)
-				throws java.io.IOException {
-			try {
-				write(new org.apache.thrift.protocol.TCompactProtocol(
-						new org.apache.thrift.transport.TIOStreamTransport(out)));
-			} catch (org.apache.thrift.TException te) {
-				throw new java.io.IOException(te);
-			}
-		}
-
-		private void readObject(java.io.ObjectInputStream in)
-				throws java.io.IOException, ClassNotFoundException {
-			try {
-				read(new org.apache.thrift.protocol.TCompactProtocol(
-						new org.apache.thrift.transport.TIOStreamTransport(in)));
-			} catch (org.apache.thrift.TException te) {
-				throw new java.io.IOException(te);
-			}
-		}
-
-		private static class genSubset_argsStandardSchemeFactory implements
-				SchemeFactory {
-			public genSubset_argsStandardScheme getScheme() {
-				return new genSubset_argsStandardScheme();
-			}
-		}
-
-		private static class genSubset_argsStandardScheme extends
-				StandardScheme<genSubset_args> {
-
-			public void read(org.apache.thrift.protocol.TProtocol iprot,
-					genSubset_args struct) throws org.apache.thrift.TException {
-				org.apache.thrift.protocol.TField schemeField;
-				iprot.readStructBegin();
-				while (true) {
-					schemeField = iprot.readFieldBegin();
-					if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
-						break;
-					}
-					switch (schemeField.id) {
-					case 1: // FILE_PATH
-						if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-							struct.filePath = iprot.readString();
-							struct.setFilePathIsSet(true);
-						} else {
-							org.apache.thrift.protocol.TProtocolUtil.skip(
-									iprot, schemeField.type);
-						}
-						break;
-					case 2: // OUTPUT_DIR
-						if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-							struct.outputDir = iprot.readString();
-							struct.setOutputDirIsSet(true);
-						} else {
-							org.apache.thrift.protocol.TProtocolUtil.skip(
-									iprot, schemeField.type);
-						}
-						break;
-					case 3: // SUBSET
-						if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-							struct.subset = iprot.readString();
-							struct.setSubsetIsSet(true);
-						} else {
-							org.apache.thrift.protocol.TProtocolUtil.skip(
-									iprot, schemeField.type);
-						}
-						break;
-					case 4: // TYPES
-						if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
-							{
-								org.apache.thrift.protocol.TList _list0 = iprot
-										.readListBegin();
-								struct.types = new ArrayList<FileType>(
-										_list0.size);
-								for (int _i1 = 0; _i1 < _list0.size; ++_i1) {
-									FileType _elem2;
-									_elem2 = FileType.findByValue(iprot
-											.readI32());
-									struct.types.add(_elem2);
-								}
-								iprot.readListEnd();
-							}
-							struct.setTypesIsSet(true);
-						} else {
-							org.apache.thrift.protocol.TProtocolUtil.skip(
-									iprot, schemeField.type);
-						}
-						break;
-					default:
-						org.apache.thrift.protocol.TProtocolUtil.skip(iprot,
-								schemeField.type);
-					}
-					iprot.readFieldEnd();
-				}
-				iprot.readStructEnd();
-
-				// check for required fields of primitive type, which can't be
-				// checked in the validate method
-				struct.validate();
-			}
-
-			public void write(org.apache.thrift.protocol.TProtocol oprot,
-					genSubset_args struct) throws org.apache.thrift.TException {
-				struct.validate();
-
-				oprot.writeStructBegin(STRUCT_DESC);
-				if (struct.filePath != null) {
-					oprot.writeFieldBegin(FILE_PATH_FIELD_DESC);
-					oprot.writeString(struct.filePath);
-					oprot.writeFieldEnd();
-				}
-				if (struct.outputDir != null) {
-					oprot.writeFieldBegin(OUTPUT_DIR_FIELD_DESC);
-					oprot.writeString(struct.outputDir);
-					oprot.writeFieldEnd();
-				}
-				if (struct.subset != null) {
-					oprot.writeFieldBegin(SUBSET_FIELD_DESC);
-					oprot.writeString(struct.subset);
-					oprot.writeFieldEnd();
-				}
-				if (struct.types != null) {
-					oprot.writeFieldBegin(TYPES_FIELD_DESC);
-					{
-						oprot.writeListBegin(new org.apache.thrift.protocol.TList(
-								org.apache.thrift.protocol.TType.I32,
-								struct.types.size()));
-						for (FileType _iter3 : struct.types) {
-							oprot.writeI32(_iter3.getValue());
-						}
-						oprot.writeListEnd();
-					}
-					oprot.writeFieldEnd();
-				}
-				oprot.writeFieldStop();
-				oprot.writeStructEnd();
-			}
-
-		}
-
-		private static class genSubset_argsTupleSchemeFactory implements
-				SchemeFactory {
-			public genSubset_argsTupleScheme getScheme() {
-				return new genSubset_argsTupleScheme();
-			}
-		}
-
-		private static class genSubset_argsTupleScheme extends
-				TupleScheme<genSubset_args> {
-
-			public void write(org.apache.thrift.protocol.TProtocol prot,
-					genSubset_args struct) throws org.apache.thrift.TException {
-				TTupleProtocol oprot = (TTupleProtocol) prot;
-				BitSet optionals = new BitSet();
-				if (struct.isSetFilePath()) {
-					optionals.set(0);
-				}
-				if (struct.isSetOutputDir()) {
-					optionals.set(1);
-				}
-				if (struct.isSetSubset()) {
-					optionals.set(2);
-				}
-				if (struct.isSetTypes()) {
-					optionals.set(3);
-				}
-				oprot.writeBitSet(optionals, 4);
-				if (struct.isSetFilePath()) {
-					oprot.writeString(struct.filePath);
-				}
-				if (struct.isSetOutputDir()) {
-					oprot.writeString(struct.outputDir);
-				}
-				if (struct.isSetSubset()) {
-					oprot.writeString(struct.subset);
-				}
-				if (struct.isSetTypes()) {
-					{
-						oprot.writeI32(struct.types.size());
-						for (FileType _iter4 : struct.types) {
-							oprot.writeI32(_iter4.getValue());
-						}
-					}
-				}
-			}
-
-			public void read(org.apache.thrift.protocol.TProtocol prot,
-					genSubset_args struct) throws org.apache.thrift.TException {
-				TTupleProtocol iprot = (TTupleProtocol) prot;
-				BitSet incoming = iprot.readBitSet(4);
-				if (incoming.get(0)) {
-					struct.filePath = iprot.readString();
-					struct.setFilePathIsSet(true);
-				}
-				if (incoming.get(1)) {
-					struct.outputDir = iprot.readString();
-					struct.setOutputDirIsSet(true);
-				}
-				if (incoming.get(2)) {
-					struct.subset = iprot.readString();
-					struct.setSubsetIsSet(true);
-				}
-				if (incoming.get(3)) {
-					{
-						org.apache.thrift.protocol.TList _list5 = new org.apache.thrift.protocol.TList(
-								org.apache.thrift.protocol.TType.I32,
-								iprot.readI32());
-						struct.types = new ArrayList<FileType>(_list5.size);
-						for (int _i6 = 0; _i6 < _list5.size; ++_i6) {
-							FileType _elem7;
-							_elem7 = FileType.findByValue(iprot.readI32());
-							struct.types.add(_elem7);
-						}
-					}
-					struct.setTypesIsSet(true);
-				}
-			}
-		}
-
-	}
-
-	public static class genSubset_result
-			implements
-			org.apache.thrift.TBase<genSubset_result, genSubset_result._Fields>,
-			java.io.Serializable, Cloneable, Comparable<genSubset_result> {
-		private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-				"genSubset_result");
-
-		private static final org.apache.thrift.protocol.TField EX_FIELD_DESC = new org.apache.thrift.protocol.TField(
-				"ex", org.apache.thrift.protocol.TType.STRUCT, (short) 1);
-
-		private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
-		static {
-			schemes.put(StandardScheme.class,
-					new genSubset_resultStandardSchemeFactory());
-			schemes.put(TupleScheme.class,
-					new genSubset_resultTupleSchemeFactory());
-		}
-
-		public IOException ex; // required
-
-		/**
-		 * The set of fields this struct contains, along with convenience
-		 * methods for finding and manipulating them.
-		 */
-		public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-			EX((short) 1, "ex");
-
-			private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
-
-			static {
-				for (_Fields field : EnumSet.allOf(_Fields.class)) {
-					byName.put(field.getFieldName(), field);
-				}
-			}
-
-			/**
-			 * Find the _Fields constant that matches fieldId, or null if its
-			 * not found.
-			 */
-			public static _Fields findByThriftId(int fieldId) {
-				switch (fieldId) {
-				case 1: // EX
-					return EX;
-				default:
-					return null;
-				}
-			}
-
-			/**
-			 * Find the _Fields constant that matches fieldId, throwing an
-			 * exception if it is not found.
-			 */
-			public static _Fields findByThriftIdOrThrow(int fieldId) {
-				_Fields fields = findByThriftId(fieldId);
-				if (fields == null)
-					throw new IllegalArgumentException("Field " + fieldId
-							+ " doesn't exist!");
-				return fields;
-			}
-
-			/**
-			 * Find the _Fields constant that matches name, or null if its not
-			 * found.
-			 */
-			public static _Fields findByName(String name) {
-				return byName.get(name);
-			}
-
-			private final short _thriftId;
-			private final String _fieldName;
-
-			_Fields(short thriftId, String fieldName) {
-				_thriftId = thriftId;
-				_fieldName = fieldName;
-			}
-
-			public short getThriftFieldId() {
-				return _thriftId;
-			}
-
-			public String getFieldName() {
-				return _fieldName;
-			}
-		}
-
-		// isset id assignments
-		public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
-		static {
-			Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
-					_Fields.class);
-			tmpMap.put(_Fields.EX,
-					new org.apache.thrift.meta_data.FieldMetaData("ex",
-							org.apache.thrift.TFieldRequirementType.DEFAULT,
-							new org.apache.thrift.meta_data.FieldValueMetaData(
-									org.apache.thrift.protocol.TType.STRUCT)));
-			metaDataMap = Collections.unmodifiableMap(tmpMap);
-			org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(
-					genSubset_result.class, metaDataMap);
-		}
-
-		public genSubset_result() {
-		}
-
-		public genSubset_result(IOException ex) {
-			this();
-			this.ex = ex;
-		}
-
-		/**
-		 * Performs a deep copy on <i>other</i>.
-		 */
-		public genSubset_result(genSubset_result other) {
-			if (other.isSetEx()) {
-				this.ex = new IOException(other.ex);
-			}
-		}
-
-		public genSubset_result deepCopy() {
-			return new genSubset_result(this);
-		}
-
-		public void clear() {
-			this.ex = null;
-		}
-
-		public IOException getEx() {
-			return this.ex;
-		}
-
-		public genSubset_result setEx(IOException ex) {
-			this.ex = ex;
-			return this;
-		}
-
-		public void unsetEx() {
-			this.ex = null;
-		}
-
-		/**
-		 * Returns true if field ex is set (has been assigned a value) and false
-		 * otherwise
-		 */
-		public boolean isSetEx() {
-			return this.ex != null;
-		}
-
-		public void setExIsSet(boolean value) {
-			if (!value) {
-				this.ex = null;
-			}
-		}
-
-		public void setFieldValue(_Fields field, Object value) {
-			switch (field) {
-			case EX:
-				if (value == null) {
-					unsetEx();
-				} else {
-					setEx((IOException) value);
-				}
-				break;
-
-			}
-		}
-
-		public Object getFieldValue(_Fields field) {
-			switch (field) {
-			case EX:
-				return getEx();
-
-			}
-			throw new IllegalStateException();
-		}
-
-		/**
-		 * Returns true if field corresponding to fieldID is set (has been
-		 * assigned a value) and false otherwise
-		 */
-		public boolean isSet(_Fields field) {
-			if (field == null) {
-				throw new IllegalArgumentException();
-			}
-
-			switch (field) {
-			case EX:
-				return isSetEx();
-			}
-			throw new IllegalStateException();
-		}
-
-		@Override
-		public boolean equals(Object that) {
-			if (that == null)
-				return false;
-			if (that instanceof genSubset_result)
-				return this.equals((genSubset_result) that);
-			return false;
-		}
-
-		public boolean equals(genSubset_result that) {
-			if (that == null)
-				return false;
-
-			boolean this_present_ex = true && this.isSetEx();
-			boolean that_present_ex = true && that.isSetEx();
-			if (this_present_ex || that_present_ex) {
-				if (!(this_present_ex && that_present_ex))
-					return false;
-				if (!this.ex.equals(that.ex))
-					return false;
-			}
-
-			return true;
-		}
-
-		@Override
-		public int hashCode() {
-			return 0;
-		}
-
-		public int compareTo(genSubset_result other) {
-			if (!getClass().equals(other.getClass())) {
-				return getClass().getName().compareTo(
-						other.getClass().getName());
-			}
-
-			int lastComparison = 0;
-
-			lastComparison = Boolean.valueOf(isSetEx()).compareTo(
-					other.isSetEx());
-			if (lastComparison != 0) {
-				return lastComparison;
-			}
-			if (isSetEx()) {
-				lastComparison = org.apache.thrift.TBaseHelper.compareTo(
-						this.ex, other.ex);
-				if (lastComparison != 0) {
-					return lastComparison;
-				}
-			}
-			return 0;
-		}
-
-		public _Fields fieldForId(int fieldId) {
-			return _Fields.findByThriftId(fieldId);
-		}
-
-		public void read(org.apache.thrift.protocol.TProtocol iprot)
-				throws org.apache.thrift.TException {
-			schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
-		}
-
-		public void write(org.apache.thrift.protocol.TProtocol oprot)
-				throws org.apache.thrift.TException {
-			schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
-		}
-
-		@Override
-		public String toString() {
-			StringBuilder sb = new StringBuilder("genSubset_result(");
-			boolean first = true;
-
-			sb.append("ex:");
-			if (this.ex == null) {
-				sb.append("null");
-			} else {
-				sb.append(this.ex);
-			}
-			first = false;
-			sb.append(")");
-			return sb.toString();
-		}
-
-		public void validate() throws org.apache.thrift.TException {
-			// check for required fields
-			// check for sub-struct validity
-		}
-
-		private void writeObject(java.io.ObjectOutputStream out)
-				throws java.io.IOException {
-			try {
-				write(new org.apache.thrift.protocol.TCompactProtocol(
-						new org.apache.thrift.transport.TIOStreamTransport(out)));
-			} catch (org.apache.thrift.TException te) {
-				throw new java.io.IOException(te);
-			}
-		}
-
-		private void readObject(java.io.ObjectInputStream in)
-				throws java.io.IOException, ClassNotFoundException {
-			try {
-				read(new org.apache.thrift.protocol.TCompactProtocol(
-						new org.apache.thrift.transport.TIOStreamTransport(in)));
-			} catch (org.apache.thrift.TException te) {
-				throw new java.io.IOException(te);
-			}
-		}
-
-		private static class genSubset_resultStandardSchemeFactory implements
-				SchemeFactory {
-			public genSubset_resultStandardScheme getScheme() {
-				return new genSubset_resultStandardScheme();
-			}
-		}
-
-		private static class genSubset_resultStandardScheme extends
-				StandardScheme<genSubset_result> {
-
-			public void read(org.apache.thrift.protocol.TProtocol iprot,
-					genSubset_result struct)
-					throws org.apache.thrift.TException {
-				org.apache.thrift.protocol.TField schemeField;
-				iprot.readStructBegin();
-				while (true) {
-					schemeField = iprot.readFieldBegin();
-					if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
-						break;
-					}
-					switch (schemeField.id) {
-					case 1: // EX
-						if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-							struct.ex = new IOException();
-							struct.ex.read(iprot);
-							struct.setExIsSet(true);
-						} else {
-							org.apache.thrift.protocol.TProtocolUtil.skip(
-									iprot, schemeField.type);
-						}
-						break;
-					default:
-						org.apache.thrift.protocol.TProtocolUtil.skip(iprot,
-								schemeField.type);
-					}
-					iprot.readFieldEnd();
-				}
-				iprot.readStructEnd();
-
-				// check for required fields of primitive type, which can't be
-				// checked in the validate method
-				struct.validate();
-			}
-
-			public void write(org.apache.thrift.protocol.TProtocol oprot,
-					genSubset_result struct)
-					throws org.apache.thrift.TException {
-				struct.validate();
-
-				oprot.writeStructBegin(STRUCT_DESC);
-				if (struct.ex != null) {
-					oprot.writeFieldBegin(EX_FIELD_DESC);
-					struct.ex.write(oprot);
-					oprot.writeFieldEnd();
-				}
-				oprot.writeFieldStop();
-				oprot.writeStructEnd();
-			}
-
-		}
-
-		private static class genSubset_resultTupleSchemeFactory implements
-				SchemeFactory {
-			public genSubset_resultTupleScheme getScheme() {
-				return new genSubset_resultTupleScheme();
-			}
-		}
-
-		private static class genSubset_resultTupleScheme extends
-				TupleScheme<genSubset_result> {
-
-			public void write(org.apache.thrift.protocol.TProtocol prot,
-					genSubset_result struct)
-					throws org.apache.thrift.TException {
-				TTupleProtocol oprot = (TTupleProtocol) prot;
-				BitSet optionals = new BitSet();
-				if (struct.isSetEx()) {
-					optionals.set(0);
-				}
-				oprot.writeBitSet(optionals, 1);
-				if (struct.isSetEx()) {
-					struct.ex.write(oprot);
-				}
-			}
-
-			public void read(org.apache.thrift.protocol.TProtocol prot,
-					genSubset_result struct)
-					throws org.apache.thrift.TException {
-				TTupleProtocol iprot = (TTupleProtocol) prot;
-				BitSet incoming = iprot.readBitSet(1);
-				if (incoming.get(0)) {
-					struct.ex = new IOException();
-					struct.ex.read(iprot);
-					struct.setExIsSet(true);
-				}
-			}
-		}
-
-	}
+  public interface Iface {
+
+    public void genSubset(String filePath, String outputDir, String subset, List<FileType> types) throws IOException, org.apache.thrift.TException;
+
+  }
+
+  public interface AsyncIface {
+
+    public void genSubset(String filePath, String outputDir, String subset, List<FileType> types, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
+
+  }
+
+  public static class Client extends org.apache.thrift.TServiceClient implements Iface {
+    public static class Factory implements org.apache.thrift.TServiceClientFactory<Client> {
+      public Factory() {}
+      public Client getClient(org.apache.thrift.protocol.TProtocol prot) {
+        return new Client(prot);
+      }
+      public Client getClient(org.apache.thrift.protocol.TProtocol iprot, org.apache.thrift.protocol.TProtocol oprot) {
+        return new Client(iprot, oprot);
+      }
+    }
+
+    public Client(org.apache.thrift.protocol.TProtocol prot)
+    {
+      super(prot, prot);
+    }
+
+    public Client(org.apache.thrift.protocol.TProtocol iprot, org.apache.thrift.protocol.TProtocol oprot) {
+      super(iprot, oprot);
+    }
+
+    public void genSubset(String filePath, String outputDir, String subset, List<FileType> types) throws IOException, org.apache.thrift.TException
+    {
+      send_genSubset(filePath, outputDir, subset, types);
+      recv_genSubset();
+    }
+
+    public void send_genSubset(String filePath, String outputDir, String subset, List<FileType> types) throws org.apache.thrift.TException
+    {
+      genSubset_args args = new genSubset_args();
+      args.setFilePath(filePath);
+      args.setOutputDir(outputDir);
+      args.setSubset(subset);
+      args.setTypes(types);
+      sendBase("genSubset", args);
+    }
+
+    public void recv_genSubset() throws IOException, org.apache.thrift.TException
+    {
+      genSubset_result result = new genSubset_result();
+      receiveBase(result, "genSubset");
+      if (result.ex != null) {
+        throw result.ex;
+      }
+      return;
+    }
+
+  }
+  public static class AsyncClient extends org.apache.thrift.async.TAsyncClient implements AsyncIface {
+    public static class Factory implements org.apache.thrift.async.TAsyncClientFactory<AsyncClient> {
+      private org.apache.thrift.async.TAsyncClientManager clientManager;
+      private org.apache.thrift.protocol.TProtocolFactory protocolFactory;
+      public Factory(org.apache.thrift.async.TAsyncClientManager clientManager, org.apache.thrift.protocol.TProtocolFactory protocolFactory) {
+        this.clientManager = clientManager;
+        this.protocolFactory = protocolFactory;
+      }
+      public AsyncClient getAsyncClient(org.apache.thrift.transport.TNonblockingTransport transport) {
+        return new AsyncClient(protocolFactory, clientManager, transport);
+      }
+    }
+
+    public AsyncClient(org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.async.TAsyncClientManager clientManager, org.apache.thrift.transport.TNonblockingTransport transport) {
+      super(protocolFactory, clientManager, transport);
+    }
+
+    public void genSubset(String filePath, String outputDir, String subset, List<FileType> types, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      genSubset_call method_call = new genSubset_call(filePath, outputDir, subset, types, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class genSubset_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String filePath;
+      private String outputDir;
+      private String subset;
+      private List<FileType> types;
+      public genSubset_call(String filePath, String outputDir, String subset, List<FileType> types, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.filePath = filePath;
+        this.outputDir = outputDir;
+        this.subset = subset;
+        this.types = types;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("genSubset", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        genSubset_args args = new genSubset_args();
+        args.setFilePath(filePath);
+        args.setOutputDir(outputDir);
+        args.setSubset(subset);
+        args.setTypes(types);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public void getResult() throws IOException, org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        (new Client(prot)).recv_genSubset();
+      }
+    }
+
+  }
+
+  public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements org.apache.thrift.TProcessor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Processor.class.getName());
+    public Processor(I iface) {
+      super(iface, getProcessMap(new HashMap<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>>()));
+    }
+
+    protected Processor(I iface, Map<String,  org.apache.thrift.ProcessFunction<I, ? extends  org.apache.thrift.TBase>> processMap) {
+      super(iface, getProcessMap(processMap));
+    }
+
+    private static <I extends Iface> Map<String,  org.apache.thrift.ProcessFunction<I, ? extends  org.apache.thrift.TBase>> getProcessMap(Map<String,  org.apache.thrift.ProcessFunction<I, ? extends  org.apache.thrift.TBase>> processMap) {
+      processMap.put("genSubset", new genSubset());
+      return processMap;
+    }
+
+    public static class genSubset<I extends Iface> extends org.apache.thrift.ProcessFunction<I, genSubset_args> {
+      public genSubset() {
+        super("genSubset");
+      }
+
+      public genSubset_args getEmptyArgsInstance() {
+        return new genSubset_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public genSubset_result getResult(I iface, genSubset_args args) throws org.apache.thrift.TException {
+        genSubset_result result = new genSubset_result();
+        try {
+          iface.genSubset(args.filePath, args.outputDir, args.subset, args.types);
+        } catch (IOException ex) {
+          result.ex = ex;
+        }
+        return result;
+      }
+    }
+
+  }
+
+  public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AsyncProcessor.class.getName());
+    public AsyncProcessor(I iface) {
+      super(iface, getProcessMap(new HashMap<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>>()));
+    }
+
+    protected AsyncProcessor(I iface, Map<String,  org.apache.thrift.AsyncProcessFunction<I, ? extends  org.apache.thrift.TBase, ?>> processMap) {
+      super(iface, getProcessMap(processMap));
+    }
+
+    private static <I extends AsyncIface> Map<String,  org.apache.thrift.AsyncProcessFunction<I, ? extends  org.apache.thrift.TBase,?>> getProcessMap(Map<String,  org.apache.thrift.AsyncProcessFunction<I, ? extends  org.apache.thrift.TBase, ?>> processMap) {
+      processMap.put("genSubset", new genSubset());
+      return processMap;
+    }
+
+    public static class genSubset<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, genSubset_args, Void> {
+      public genSubset() {
+        super("genSubset");
+      }
+
+      public genSubset_args getEmptyArgsInstance() {
+        return new genSubset_args();
+      }
+
+      public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+        final org.apache.thrift.AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<Void>() { 
+          public void onComplete(Void o) {
+            genSubset_result result = new genSubset_result();
+            try {
+              fcall.sendResponse(fb,result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
+              return;
+            } catch (Exception e) {
+              LOGGER.error("Exception writing to internal frame buffer", e);
+            }
+            fb.close();
+          }
+          public void onError(Exception e) {
+            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
+            org.apache.thrift.TBase msg;
+            genSubset_result result = new genSubset_result();
+            if (e instanceof IOException) {
+                        result.ex = (IOException) e;
+                        result.setExIsSet(true);
+                        msg = result;
+            }
+             else 
+            {
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = (org.apache.thrift.TBase)new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+            }
+            try {
+              fcall.sendResponse(fb,msg,msgType,seqid);
+              return;
+            } catch (Exception ex) {
+              LOGGER.error("Exception writing to internal frame buffer", ex);
+            }
+            fb.close();
+          }
+        };
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public void start(I iface, genSubset_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws TException {
+        iface.genSubset(args.filePath, args.outputDir, args.subset, args.types,resultHandler);
+      }
+    }
+
+  }
+
+  public static class genSubset_args implements org.apache.thrift.TBase<genSubset_args, genSubset_args._Fields>, java.io.Serializable, Cloneable, Comparable<genSubset_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("genSubset_args");
+
+    private static final org.apache.thrift.protocol.TField FILE_PATH_FIELD_DESC = new org.apache.thrift.protocol.TField("filePath", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField OUTPUT_DIR_FIELD_DESC = new org.apache.thrift.protocol.TField("outputDir", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField SUBSET_FIELD_DESC = new org.apache.thrift.protocol.TField("subset", org.apache.thrift.protocol.TType.STRING, (short)3);
+    private static final org.apache.thrift.protocol.TField TYPES_FIELD_DESC = new org.apache.thrift.protocol.TField("types", org.apache.thrift.protocol.TType.LIST, (short)4);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new genSubset_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new genSubset_argsTupleSchemeFactory());
+    }
+
+    public String filePath; // required
+    public String outputDir; // required
+    public String subset; // required
+    public List<FileType> types; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      FILE_PATH((short)1, "filePath"),
+      OUTPUT_DIR((short)2, "outputDir"),
+      SUBSET((short)3, "subset"),
+      TYPES((short)4, "types");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // FILE_PATH
+            return FILE_PATH;
+          case 2: // OUTPUT_DIR
+            return OUTPUT_DIR;
+          case 3: // SUBSET
+            return SUBSET;
+          case 4: // TYPES
+            return TYPES;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.FILE_PATH, new org.apache.thrift.meta_data.FieldMetaData("filePath", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.OUTPUT_DIR, new org.apache.thrift.meta_data.FieldMetaData("outputDir", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.SUBSET, new org.apache.thrift.meta_data.FieldMetaData("subset", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.TYPES, new org.apache.thrift.meta_data.FieldMetaData("types", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, FileType.class))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(genSubset_args.class, metaDataMap);
+    }
+
+    public genSubset_args() {
+    }
+
+    public genSubset_args(
+      String filePath,
+      String outputDir,
+      String subset,
+      List<FileType> types)
+    {
+      this();
+      this.filePath = filePath;
+      this.outputDir = outputDir;
+      this.subset = subset;
+      this.types = types;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public genSubset_args(genSubset_args other) {
+      if (other.isSetFilePath()) {
+        this.filePath = other.filePath;
+      }
+      if (other.isSetOutputDir()) {
+        this.outputDir = other.outputDir;
+      }
+      if (other.isSetSubset()) {
+        this.subset = other.subset;
+      }
+      if (other.isSetTypes()) {
+        List<FileType> __this__types = new ArrayList<FileType>(other.types.size());
+        for (FileType other_element : other.types) {
+          __this__types.add(other_element);
+        }
+        this.types = __this__types;
+      }
+    }
+
+    public genSubset_args deepCopy() {
+      return new genSubset_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.filePath = null;
+      this.outputDir = null;
+      this.subset = null;
+      this.types = null;
+    }
+
+    public String getFilePath() {
+      return this.filePath;
+    }
+
+    public genSubset_args setFilePath(String filePath) {
+      this.filePath = filePath;
+      return this;
+    }
+
+    public void unsetFilePath() {
+      this.filePath = null;
+    }
+
+    /** Returns true if field filePath is set (has been assigned a value) and false otherwise */
+    public boolean isSetFilePath() {
+      return this.filePath != null;
+    }
+
+    public void setFilePathIsSet(boolean value) {
+      if (!value) {
+        this.filePath = null;
+      }
+    }
+
+    public String getOutputDir() {
+      return this.outputDir;
+    }
+
+    public genSubset_args setOutputDir(String outputDir) {
+      this.outputDir = outputDir;
+      return this;
+    }
+
+    public void unsetOutputDir() {
+      this.outputDir = null;
+    }
+
+    /** Returns true if field outputDir is set (has been assigned a value) and false otherwise */
+    public boolean isSetOutputDir() {
+      return this.outputDir != null;
+    }
+
+    public void setOutputDirIsSet(boolean value) {
+      if (!value) {
+        this.outputDir = null;
+      }
+    }
+
+    public String getSubset() {
+      return this.subset;
+    }
+
+    public genSubset_args setSubset(String subset) {
+      this.subset = subset;
+      return this;
+    }
+
+    public void unsetSubset() {
+      this.subset = null;
+    }
+
+    /** Returns true if field subset is set (has been assigned a value) and false otherwise */
+    public boolean isSetSubset() {
+      return this.subset != null;
+    }
+
+    public void setSubsetIsSet(boolean value) {
+      if (!value) {
+        this.subset = null;
+      }
+    }
+
+    public int getTypesSize() {
+      return (this.types == null) ? 0 : this.types.size();
+    }
+
+    public java.util.Iterator<FileType> getTypesIterator() {
+      return (this.types == null) ? null : this.types.iterator();
+    }
+
+    public void addToTypes(FileType elem) {
+      if (this.types == null) {
+        this.types = new ArrayList<FileType>();
+      }
+      this.types.add(elem);
+    }
+
+    public List<FileType> getTypes() {
+      return this.types;
+    }
+
+    public genSubset_args setTypes(List<FileType> types) {
+      this.types = types;
+      return this;
+    }
+
+    public void unsetTypes() {
+      this.types = null;
+    }
+
+    /** Returns true if field types is set (has been assigned a value) and false otherwise */
+    public boolean isSetTypes() {
+      return this.types != null;
+    }
+
+    public void setTypesIsSet(boolean value) {
+      if (!value) {
+        this.types = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case FILE_PATH:
+        if (value == null) {
+          unsetFilePath();
+        } else {
+          setFilePath((String)value);
+        }
+        break;
+
+      case OUTPUT_DIR:
+        if (value == null) {
+          unsetOutputDir();
+        } else {
+          setOutputDir((String)value);
+        }
+        break;
+
+      case SUBSET:
+        if (value == null) {
+          unsetSubset();
+        } else {
+          setSubset((String)value);
+        }
+        break;
+
+      case TYPES:
+        if (value == null) {
+          unsetTypes();
+        } else {
+          setTypes((List<FileType>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case FILE_PATH:
+        return getFilePath();
+
+      case OUTPUT_DIR:
+        return getOutputDir();
+
+      case SUBSET:
+        return getSubset();
+
+      case TYPES:
+        return getTypes();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case FILE_PATH:
+        return isSetFilePath();
+      case OUTPUT_DIR:
+        return isSetOutputDir();
+      case SUBSET:
+        return isSetSubset();
+      case TYPES:
+        return isSetTypes();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof genSubset_args)
+        return this.equals((genSubset_args)that);
+      return false;
+    }
+
+    public boolean equals(genSubset_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_filePath = true && this.isSetFilePath();
+      boolean that_present_filePath = true && that.isSetFilePath();
+      if (this_present_filePath || that_present_filePath) {
+        if (!(this_present_filePath && that_present_filePath))
+          return false;
+        if (!this.filePath.equals(that.filePath))
+          return false;
+      }
+
+      boolean this_present_outputDir = true && this.isSetOutputDir();
+      boolean that_present_outputDir = true && that.isSetOutputDir();
+      if (this_present_outputDir || that_present_outputDir) {
+        if (!(this_present_outputDir && that_present_outputDir))
+          return false;
+        if (!this.outputDir.equals(that.outputDir))
+          return false;
+      }
+
+      boolean this_present_subset = true && this.isSetSubset();
+      boolean that_present_subset = true && that.isSetSubset();
+      if (this_present_subset || that_present_subset) {
+        if (!(this_present_subset && that_present_subset))
+          return false;
+        if (!this.subset.equals(that.subset))
+          return false;
+      }
+
+      boolean this_present_types = true && this.isSetTypes();
+      boolean that_present_types = true && that.isSetTypes();
+      if (this_present_types || that_present_types) {
+        if (!(this_present_types && that_present_types))
+          return false;
+        if (!this.types.equals(that.types))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    public int compareTo(genSubset_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = Boolean.valueOf(isSetFilePath()).compareTo(other.isSetFilePath());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetFilePath()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.filePath, other.filePath);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetOutputDir()).compareTo(other.isSetOutputDir());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetOutputDir()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.outputDir, other.outputDir);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetSubset()).compareTo(other.isSetSubset());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSubset()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.subset, other.subset);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetTypes()).compareTo(other.isSetTypes());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTypes()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.types, other.types);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("genSubset_args(");
+      boolean first = true;
+
+      sb.append("filePath:");
+      if (this.filePath == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.filePath);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("outputDir:");
+      if (this.outputDir == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.outputDir);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("subset:");
+      if (this.subset == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.subset);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("types:");
+      if (this.types == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.types);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class genSubset_argsStandardSchemeFactory implements SchemeFactory {
+      public genSubset_argsStandardScheme getScheme() {
+        return new genSubset_argsStandardScheme();
+      }
+    }
+
+    private static class genSubset_argsStandardScheme extends StandardScheme<genSubset_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, genSubset_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // FILE_PATH
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.filePath = iprot.readString();
+                struct.setFilePathIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // OUTPUT_DIR
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.outputDir = iprot.readString();
+                struct.setOutputDirIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 3: // SUBSET
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.subset = iprot.readString();
+                struct.setSubsetIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 4: // TYPES
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list0 = iprot.readListBegin();
+                  struct.types = new ArrayList<FileType>(_list0.size);
+                  for (int _i1 = 0; _i1 < _list0.size; ++_i1)
+                  {
+                    FileType _elem2;
+                    _elem2 = FileType.findByValue(iprot.readI32());
+                    struct.types.add(_elem2);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setTypesIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, genSubset_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.filePath != null) {
+          oprot.writeFieldBegin(FILE_PATH_FIELD_DESC);
+          oprot.writeString(struct.filePath);
+          oprot.writeFieldEnd();
+        }
+        if (struct.outputDir != null) {
+          oprot.writeFieldBegin(OUTPUT_DIR_FIELD_DESC);
+          oprot.writeString(struct.outputDir);
+          oprot.writeFieldEnd();
+        }
+        if (struct.subset != null) {
+          oprot.writeFieldBegin(SUBSET_FIELD_DESC);
+          oprot.writeString(struct.subset);
+          oprot.writeFieldEnd();
+        }
+        if (struct.types != null) {
+          oprot.writeFieldBegin(TYPES_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.I32, struct.types.size()));
+            for (FileType _iter3 : struct.types)
+            {
+              oprot.writeI32(_iter3.getValue());
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class genSubset_argsTupleSchemeFactory implements SchemeFactory {
+      public genSubset_argsTupleScheme getScheme() {
+        return new genSubset_argsTupleScheme();
+      }
+    }
+
+    private static class genSubset_argsTupleScheme extends TupleScheme<genSubset_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, genSubset_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetFilePath()) {
+          optionals.set(0);
+        }
+        if (struct.isSetOutputDir()) {
+          optionals.set(1);
+        }
+        if (struct.isSetSubset()) {
+          optionals.set(2);
+        }
+        if (struct.isSetTypes()) {
+          optionals.set(3);
+        }
+        oprot.writeBitSet(optionals, 4);
+        if (struct.isSetFilePath()) {
+          oprot.writeString(struct.filePath);
+        }
+        if (struct.isSetOutputDir()) {
+          oprot.writeString(struct.outputDir);
+        }
+        if (struct.isSetSubset()) {
+          oprot.writeString(struct.subset);
+        }
+        if (struct.isSetTypes()) {
+          {
+            oprot.writeI32(struct.types.size());
+            for (FileType _iter4 : struct.types)
+            {
+              oprot.writeI32(_iter4.getValue());
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, genSubset_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(4);
+        if (incoming.get(0)) {
+          struct.filePath = iprot.readString();
+          struct.setFilePathIsSet(true);
+        }
+        if (incoming.get(1)) {
+          struct.outputDir = iprot.readString();
+          struct.setOutputDirIsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.subset = iprot.readString();
+          struct.setSubsetIsSet(true);
+        }
+        if (incoming.get(3)) {
+          {
+            org.apache.thrift.protocol.TList _list5 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.I32, iprot.readI32());
+            struct.types = new ArrayList<FileType>(_list5.size);
+            for (int _i6 = 0; _i6 < _list5.size; ++_i6)
+            {
+              FileType _elem7;
+              _elem7 = FileType.findByValue(iprot.readI32());
+              struct.types.add(_elem7);
+            }
+          }
+          struct.setTypesIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class genSubset_result implements org.apache.thrift.TBase<genSubset_result, genSubset_result._Fields>, java.io.Serializable, Cloneable, Comparable<genSubset_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("genSubset_result");
+
+    private static final org.apache.thrift.protocol.TField EX_FIELD_DESC = new org.apache.thrift.protocol.TField("ex", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new genSubset_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new genSubset_resultTupleSchemeFactory());
+    }
+
+    public IOException ex; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      EX((short)1, "ex");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // EX
+            return EX;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.EX, new org.apache.thrift.meta_data.FieldMetaData("ex", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRUCT)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(genSubset_result.class, metaDataMap);
+    }
+
+    public genSubset_result() {
+    }
+
+    public genSubset_result(
+      IOException ex)
+    {
+      this();
+      this.ex = ex;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public genSubset_result(genSubset_result other) {
+      if (other.isSetEx()) {
+        this.ex = new IOException(other.ex);
+      }
+    }
+
+    public genSubset_result deepCopy() {
+      return new genSubset_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.ex = null;
+    }
+
+    public IOException getEx() {
+      return this.ex;
+    }
+
+    public genSubset_result setEx(IOException ex) {
+      this.ex = ex;
+      return this;
+    }
+
+    public void unsetEx() {
+      this.ex = null;
+    }
+
+    /** Returns true if field ex is set (has been assigned a value) and false otherwise */
+    public boolean isSetEx() {
+      return this.ex != null;
+    }
+
+    public void setExIsSet(boolean value) {
+      if (!value) {
+        this.ex = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case EX:
+        if (value == null) {
+          unsetEx();
+        } else {
+          setEx((IOException)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case EX:
+        return getEx();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case EX:
+        return isSetEx();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof genSubset_result)
+        return this.equals((genSubset_result)that);
+      return false;
+    }
+
+    public boolean equals(genSubset_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_ex = true && this.isSetEx();
+      boolean that_present_ex = true && that.isSetEx();
+      if (this_present_ex || that_present_ex) {
+        if (!(this_present_ex && that_present_ex))
+          return false;
+        if (!this.ex.equals(that.ex))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    public int compareTo(genSubset_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = Boolean.valueOf(isSetEx()).compareTo(other.isSetEx());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetEx()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ex, other.ex);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("genSubset_result(");
+      boolean first = true;
+
+      sb.append("ex:");
+      if (this.ex == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.ex);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class genSubset_resultStandardSchemeFactory implements SchemeFactory {
+      public genSubset_resultStandardScheme getScheme() {
+        return new genSubset_resultStandardScheme();
+      }
+    }
+
+    private static class genSubset_resultStandardScheme extends StandardScheme<genSubset_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, genSubset_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // EX
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.ex = new IOException();
+                struct.ex.read(iprot);
+                struct.setExIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, genSubset_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.ex != null) {
+          oprot.writeFieldBegin(EX_FIELD_DESC);
+          struct.ex.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class genSubset_resultTupleSchemeFactory implements SchemeFactory {
+      public genSubset_resultTupleScheme getScheme() {
+        return new genSubset_resultTupleScheme();
+      }
+    }
+
+    private static class genSubset_resultTupleScheme extends TupleScheme<genSubset_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, genSubset_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetEx()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetEx()) {
+          struct.ex.write(oprot);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, genSubset_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.ex = new IOException();
+          struct.ex.read(iprot);
+          struct.setExIsSet(true);
+        }
+      }
+    }
+
+  }
 
 }
