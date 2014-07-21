@@ -6,9 +6,12 @@ import java.util.List;
 import org.apache.thrift.TException;
 
 import com.google.typography.font.sfntly.Font;
+import com.google.typography.font.tools.fontinfo.DataDisplayTable;
+import com.google.typography.font.tools.fontinfo.FontInfo;
+import com.google.typography.font.tools.fontinfo.FontUtils;
 import com.xiaomi.mif2e.fontSubsetter.SubsetterService.Iface;
 
-public class GenSubsetHandler implements Iface {
+public class SubsetterServiceHandler implements Iface {
 
 	@Override
 	public void genSubset(String filePath, String outputDir, String subset,
@@ -38,8 +41,14 @@ public class GenSubsetHandler implements Iface {
 
 	@Override
 	public String getFontInfo(String filePath) throws TException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Font font = FontUtils.getFonts(filePath)[0];
+			DataDisplayTable table = FontInfo.listNameEntries(font);
+			return table.csvString();
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+			throw new IOException(ExceptionType.IO, e.getMessage());
+		}
 	}
 
 }

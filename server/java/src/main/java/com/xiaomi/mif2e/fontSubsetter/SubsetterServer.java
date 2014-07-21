@@ -7,14 +7,14 @@ import org.apache.thrift.transport.TServerTransport;
 
 public class SubsetterServer {
 
-	private static GenSubsetHandler handler;
+	private static SubsetterServiceHandler handler;
 	@SuppressWarnings("rawtypes")
 	private static SubsetterService.Processor processor;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String[] args) {
 		try {
-			handler = new GenSubsetHandler();
+			handler = new SubsetterServiceHandler();
 			processor = new SubsetterService.Processor(handler);
 
 			Runnable simple = new Runnable() {

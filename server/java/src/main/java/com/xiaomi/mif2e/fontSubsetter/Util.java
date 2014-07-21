@@ -5,9 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.typography.font.sfntly.Font;
 import com.google.typography.font.sfntly.FontFactory;
@@ -16,11 +20,16 @@ import com.google.typography.font.sfntly.data.WritableFontData;
 import com.google.typography.font.sfntly.table.core.CMapTable;
 import com.google.typography.font.tools.conversion.eot.EOTWriter;
 import com.google.typography.font.tools.conversion.woff.WoffWriter;
+import com.google.typography.font.tools.fontinfo.DataDisplayTable;
+import com.google.typography.font.tools.fontinfo.FontInfo;
+import com.google.typography.font.tools.fontinfo.FontUtils;
 import com.google.typography.font.tools.sfnttool.GlyphCoverage;
 import com.google.typography.font.tools.subsetter.RenumberingSubsetter;
 import com.google.typography.font.tools.subsetter.Subsetter;
 
 public class Util {
+
+	private static Pattern ID_REGEX = Pattern.compile("\\(id=(\\d+)\\)");
 
 	public static enum FileType {
 		TTF, WOFF, EOT
@@ -93,6 +102,29 @@ public class Util {
 		WritableFontData eotData = new EOTWriter(mtx).convert(font);
 		eotData.copyTo(fos);
 		fos.close();
+	}
+
+	private static int getIdOfCell(String cellValue) {
+		Matcher m = ID_REGEX.matcher(cellValue);
+		int id = -1;
+		if (m.find()) {
+			id = Integer.parseInt(m.group(1));
+		}
+		return id;
+	}
+
+	public static Map<String, String> getFontInfo(String fontPath)
+			throws IOException {
+		Font font = FontUtils.getFonts(fontPath)[0];
+		DataDisplayTable table = FontInfo.listNameEntries(font);
+		Map<String, String> infoMap = new HashMap<String, String>();
+		for (List<String> row : table.getData()) {
+			int langId = getIdOfCell(row.get(2));
+			if (langId == 0 || langId == 1033 || langId == 2052) {
+				infoMap.put(row.get(3), row.get(4));
+			}
+		}
+		return infoMap;
 	}
 
 }
