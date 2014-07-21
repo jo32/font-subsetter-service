@@ -2,13 +2,11 @@ package com.xiaomi.mif2e.fontSubsetter;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.thrift.TException;
 
 import com.google.typography.font.sfntly.Font;
-import com.google.typography.font.tools.fontinfo.DataDisplayTable;
-import com.google.typography.font.tools.fontinfo.FontInfo;
-import com.google.typography.font.tools.fontinfo.FontUtils;
 import com.xiaomi.mif2e.fontSubsetter.SubsetterService.Iface;
 
 public class SubsetterServiceHandler implements Iface {
@@ -40,11 +38,9 @@ public class SubsetterServiceHandler implements Iface {
 	}
 
 	@Override
-	public String getFontInfo(String filePath) throws TException {
+	public Map<String, String> getFontInfo(String filePath) throws TException {
 		try {
-			Font font = FontUtils.getFonts(filePath)[0];
-			DataDisplayTable table = FontInfo.listNameEntries(font);
-			return table.csvString();
+			return Util.getFontInfo(filePath);
 		} catch (java.io.IOException e) {
 			e.printStackTrace();
 			throw new IOException(ExceptionType.IO, e.getMessage());
