@@ -262,8 +262,25 @@ fontSubsetter.SubsetterService_getFontInfo_result.prototype.read = function(inpu
     switch (fid)
     {
       case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString();
+      if (ftype == Thrift.Type.MAP) {
+        var _size8 = 0;
+        var _rtmp312;
+        this.success = {};
+        var _ktype9 = 0;
+        var _vtype10 = 0;
+        _rtmp312 = input.readMapBegin();
+        _ktype9 = _rtmp312.ktype;
+        _vtype10 = _rtmp312.vtype;
+        _size8 = _rtmp312.size;
+        for (var _i13 = 0; _i13 < _size8; ++_i13)
+        {
+          var key14 = null;
+          var val15 = null;
+          key14 = input.readString();
+          val15 = input.readString();
+          this.success[key14] = val15;
+        }
+        input.readMapEnd();
       } else {
         input.skip(ftype);
       }
@@ -283,8 +300,18 @@ fontSubsetter.SubsetterService_getFontInfo_result.prototype.read = function(inpu
 fontSubsetter.SubsetterService_getFontInfo_result.prototype.write = function(output) {
   output.writeStructBegin('SubsetterService_getFontInfo_result');
   if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
+    output.writeFieldBegin('success', Thrift.Type.MAP, 0);
+    output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.STRING, Thrift.objectLength(this.success));
+    for (var kiter16 in this.success)
+    {
+      if (this.success.hasOwnProperty(kiter16))
+      {
+        var viter17 = this.success[kiter16];
+        output.writeString(kiter16);
+        output.writeString(viter17);
+      }
+    }
+    output.writeMapEnd();
     output.writeFieldEnd();
   }
   output.writeFieldStop();

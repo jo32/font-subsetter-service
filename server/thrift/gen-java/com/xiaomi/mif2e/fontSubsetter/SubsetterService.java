@@ -38,7 +38,7 @@ public class SubsetterService {
 
     public void genSubset(String filePath, String outputDir, String subset, List<FileType> types) throws IOException, org.apache.thrift.TException;
 
-    public String getFontInfo(String filePath) throws org.apache.thrift.TException;
+    public Map<String,String> getFontInfo(String filePath) throws org.apache.thrift.TException;
 
   }
 
@@ -96,7 +96,7 @@ public class SubsetterService {
       return;
     }
 
-    public String getFontInfo(String filePath) throws org.apache.thrift.TException
+    public Map<String,String> getFontInfo(String filePath) throws org.apache.thrift.TException
     {
       send_getFontInfo(filePath);
       return recv_getFontInfo();
@@ -109,7 +109,7 @@ public class SubsetterService {
       sendBase("getFontInfo", args);
     }
 
-    public String recv_getFontInfo() throws org.apache.thrift.TException
+    public Map<String,String> recv_getFontInfo() throws org.apache.thrift.TException
     {
       getFontInfo_result result = new getFontInfo_result();
       receiveBase(result, "getFontInfo");
@@ -200,7 +200,7 @@ public class SubsetterService {
         prot.writeMessageEnd();
       }
 
-      public String getResult() throws org.apache.thrift.TException {
+      public Map<String,String> getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new IllegalStateException("Method call not finished!");
         }
@@ -346,7 +346,7 @@ public class SubsetterService {
       }
     }
 
-    public static class getFontInfo<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getFontInfo_args, String> {
+    public static class getFontInfo<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getFontInfo_args, Map<String,String>> {
       public getFontInfo() {
         super("getFontInfo");
       }
@@ -355,10 +355,10 @@ public class SubsetterService {
         return new getFontInfo_args();
       }
 
-      public AsyncMethodCallback<String> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
+      public AsyncMethodCallback<Map<String,String>> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new AsyncMethodCallback<String>() { 
-          public void onComplete(String o) {
+        return new AsyncMethodCallback<Map<String,String>>() { 
+          public void onComplete(Map<String,String> o) {
             getFontInfo_result result = new getFontInfo_result();
             result.success = o;
             try {
@@ -392,7 +392,7 @@ public class SubsetterService {
         return false;
       }
 
-      public void start(I iface, getFontInfo_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
+      public void start(I iface, getFontInfo_args args, org.apache.thrift.async.AsyncMethodCallback<Map<String,String>> resultHandler) throws TException {
         iface.getFontInfo(args.filePath,resultHandler);
       }
     }
@@ -1818,7 +1818,7 @@ public class SubsetterService {
   public static class getFontInfo_result implements org.apache.thrift.TBase<getFontInfo_result, getFontInfo_result._Fields>, java.io.Serializable, Cloneable, Comparable<getFontInfo_result>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getFontInfo_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRING, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.MAP, (short)0);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -1826,7 +1826,7 @@ public class SubsetterService {
       schemes.put(TupleScheme.class, new getFontInfo_resultTupleSchemeFactory());
     }
 
-    public String success; // required
+    public Map<String,String> success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -1891,7 +1891,9 @@ public class SubsetterService {
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+          new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getFontInfo_result.class, metaDataMap);
     }
@@ -1900,7 +1902,7 @@ public class SubsetterService {
     }
 
     public getFontInfo_result(
-      String success)
+      Map<String,String> success)
     {
       this();
       this.success = success;
@@ -1911,7 +1913,8 @@ public class SubsetterService {
      */
     public getFontInfo_result(getFontInfo_result other) {
       if (other.isSetSuccess()) {
-        this.success = other.success;
+        Map<String,String> __this__success = new HashMap<String,String>(other.success);
+        this.success = __this__success;
       }
     }
 
@@ -1924,11 +1927,22 @@ public class SubsetterService {
       this.success = null;
     }
 
-    public String getSuccess() {
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public void putToSuccess(String key, String val) {
+      if (this.success == null) {
+        this.success = new HashMap<String,String>();
+      }
+      this.success.put(key, val);
+    }
+
+    public Map<String,String> getSuccess() {
       return this.success;
     }
 
-    public getFontInfo_result setSuccess(String success) {
+    public getFontInfo_result setSuccess(Map<String,String> success) {
       this.success = success;
       return this;
     }
@@ -1954,7 +1968,7 @@ public class SubsetterService {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((String)value);
+          setSuccess((Map<String,String>)value);
         }
         break;
 
@@ -2102,8 +2116,20 @@ public class SubsetterService {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.success = iprot.readString();
+              if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
+                {
+                  org.apache.thrift.protocol.TMap _map8 = iprot.readMapBegin();
+                  struct.success = new HashMap<String,String>(2*_map8.size);
+                  for (int _i9 = 0; _i9 < _map8.size; ++_i9)
+                  {
+                    String _key10;
+                    String _val11;
+                    _key10 = iprot.readString();
+                    _val11 = iprot.readString();
+                    struct.success.put(_key10, _val11);
+                  }
+                  iprot.readMapEnd();
+                }
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -2126,7 +2152,15 @@ public class SubsetterService {
         oprot.writeStructBegin(STRUCT_DESC);
         if (struct.success != null) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          oprot.writeString(struct.success);
+          {
+            oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, struct.success.size()));
+            for (Map.Entry<String, String> _iter12 : struct.success.entrySet())
+            {
+              oprot.writeString(_iter12.getKey());
+              oprot.writeString(_iter12.getValue());
+            }
+            oprot.writeMapEnd();
+          }
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -2152,7 +2186,14 @@ public class SubsetterService {
         }
         oprot.writeBitSet(optionals, 1);
         if (struct.isSetSuccess()) {
-          oprot.writeString(struct.success);
+          {
+            oprot.writeI32(struct.success.size());
+            for (Map.Entry<String, String> _iter13 : struct.success.entrySet())
+            {
+              oprot.writeString(_iter13.getKey());
+              oprot.writeString(_iter13.getValue());
+            }
+          }
         }
       }
 
@@ -2161,7 +2202,18 @@ public class SubsetterService {
         TTupleProtocol iprot = (TTupleProtocol) prot;
         BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.success = iprot.readString();
+          {
+            org.apache.thrift.protocol.TMap _map14 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+            struct.success = new HashMap<String,String>(2*_map14.size);
+            for (int _i15 = 0; _i15 < _map14.size; ++_i15)
+            {
+              String _key16;
+              String _val17;
+              _key16 = iprot.readString();
+              _val17 = iprot.readString();
+              struct.success.put(_key16, _val17);
+            }
+          }
           struct.setSuccessIsSet(true);
         }
       }
