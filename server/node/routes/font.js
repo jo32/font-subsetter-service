@@ -31,7 +31,6 @@ router.post('/:hash', function (req, res, next) {
         console.log(__filename + ": " + "Created tempFontWriter for hash: " + hash);
         req.pipe(req.busboy);
         var isReturned = false;
-        var isFirstFileHandled = false;
 
         req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
 
@@ -74,7 +73,18 @@ router.post('/:hash', function (req, res, next) {
                         return next(err);
                     }
 
-                    isFirstFileHandled = true;
+                    fontModel.saveFont(hash, function (err) {
+                        if (err) {
+                            isReturned = true;
+                            return next(err);
+                        }
+
+                        console.log(__filename + ": " + "successfully Processed font with hash" + hash);
+                        res.json({
+                            "status": 200,
+                            "message": "upload successfully"
+                        });
+                    });
                 });
             });
         });
@@ -85,15 +95,7 @@ router.post('/:hash', function (req, res, next) {
                 return;
             }
 
-            if (!isFirstFileHandled) {
-                return;
-            }
-
-            console.log(__filename + ": " + "successfully Processed font with hash" + hash);
-            res.json({
-                "status": 200,
-                "message": "upload successfully"
-            });
+            console.log(__filename + ": " + "busboy finished.")
         });
     });
 
