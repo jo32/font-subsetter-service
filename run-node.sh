@@ -1,1 +1,2 @@
-#/bin/sh
+#/bin/bash
+node server/node/bin/www
