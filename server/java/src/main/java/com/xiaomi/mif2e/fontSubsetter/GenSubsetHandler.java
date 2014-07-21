@@ -10,6 +10,7 @@ import com.xiaomi.mif2e.fontSubsetter.SubsetterService.Iface;
 
 public class GenSubsetHandler implements Iface {
 
+	@Override
 	public void genSubset(String filePath, String outputDir, String subset,
 			List<FileType> types) throws IOException, TException {
 
@@ -33,6 +34,12 @@ public class GenSubsetHandler implements Iface {
 			throw new IOException(ExceptionType.IO, e.getMessage());
 		}
 
+	}
+
+	@Override
+	public String getFontInfo(String filePath) throws TException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

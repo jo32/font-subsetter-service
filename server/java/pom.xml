@@ -69,10 +69,17 @@
 			<version>0.9.1</version>
 			<scope>compile</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>sfntly</groupId>
-			<artifactId>tools</artifactId>
-			<version>20130718</version>
+			<groupId>sfntly-tool</groupId>
+			<artifactId>subsetter</artifactId>
+			<version>20140718</version>
+		</dependency>
+
+		<dependency>
+			<groupId>sfntly-info</groupId>
+			<artifactId>fontinfo</artifactId>
+			<version>20140718</version>
 		</dependency>
 	</dependencies>
 
