@@ -3,17 +3,32 @@ var router = express.Router();
 var busboy = require('connect-busboy');
 var fontModel = require('../model/font/font');
 
-router.get('/', function (req, res) {
+router.get('/', function (req, res, next) {
     // Get all fonts as a list
-    // Todo: paging
-    res.json({});
+
+    fontModel.getFontListFromDb(function (err, list) {
+        if (err) {
+            return next(err);
+        }
+
+        console.log(__filename + ": " + "Fetched fontlist from DB");
+        res.json(list);
+    });
 });
 
-router.get('/:id', function (req, res) {
+router.get('/:hash', function (req, res, next) {
     // Get the detail of a font according to its id
-    res.json({});
-});
 
+    var hash = req.params.hash;
+    fontModel.getFontInfoFromDb(hash, function (err, info) {
+        if (err) {
+            return next(err);
+        }
+
+        console.log(__filename + ": " + "Fetched info of font with hash " + hash + " from DB");
+        res.json(info);
+    });
+});
 
 // super kengdie
 router.use('/', busboy());

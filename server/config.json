@@ -1,4 +1,5 @@
 {
+    "db-folder": "./db",
     "font-folder": "./font",
     "temp-folder": "/tmp/font-subsetter"
 }
