@@ -8,6 +8,14 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         copy: {
+            hash: {
+                files: [{
+                    expand: true,
+                    cwd: 'js/hash',
+                    src: ['**/*.js'],
+                    dest: 'build'
+                }]
+            },
             htmls: {
                 files: [{
                     expand: true,

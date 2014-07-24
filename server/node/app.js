@@ -21,7 +21,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 
-app.use('/client', express.static(path.join(__dirname, '../../client/web')));
+app.use('/client', express.static(path.join(__dirname, '../../client/web-client/build')));
+app.use('/client/libs', express.static(path.join(__dirname, '../../client/web-client/libs')));
 
 app.use('/', homeRouter);
 app.use('/font', fontRouter);

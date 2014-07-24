@@ -10,6 +10,8 @@ fontSubsetter.filter('slice', function () {
     };
 });
 
+fontSubsetter.service('')
+
 var fontSubsetterControllers = angular.module("fontSubsetterControllers", []);
 
 // routing of this app

@@ -27,3 +27,10 @@ A web service that help you generate a subset the a font used to embed on your w
 
 1. run `./run-java.sh`
 2. run `./run-node.sh`
+
+## TODO
+
+1. error handling uploading non font file
+2. moving all the $http invokation into a service
+3. <strike>bug of hash mismatch</strike>
+4. java service: out of memeroy, possibly not releasing the file opened

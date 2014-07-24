@@ -43,7 +43,20 @@ router.post('/:hash', function (req, res, next) {
     var validator = fontModel.getFontHashValidator(hash);
     var tempFontWriter = fontModel.getTempFontWriter(hash, function (err, writer) {
 
+        if (!req.headers['content-type'].indexOf('multipart/form-data') < 0) {
+            var err = Error("The format maybe of encoeded as 'multipart/form-data', found content type: " + req.headers['content-type']);
+            err.status = 406;
+            return next(err);
+        }
+
+        if (!req.busboy) {
+            var err = Error("File not found in request");
+            err.status = 406;
+            return next(err);
+        }
+
         console.log(__filename + ": " + "Created tempFontWriter for hash: " + hash);
+
         req.pipe(req.busboy);
         var isReturned = false;
 

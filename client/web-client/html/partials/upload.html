@@ -1,0 +1,19 @@
+<div class="upload-form-container">
+    <form enctype="multipart/form-data" method="POST">
+        <h2>Font upload Form</h2>
+        <input type="file" id="file-selector" name="font" />
+        <input type="button" value="upload" ng-click="upload()"/>
+    </form>
+</div>
+<div ng-if="fontInfo" class="font-info-cointainer">
+    <table>
+        <thead>
+            <td>Key</td>
+            <td>Value</td>
+        </thead>
+        <tr ng-repeat="(key, value) in fontInfo">
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+        </tr>
+    </table>
+</div>
