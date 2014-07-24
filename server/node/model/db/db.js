@@ -39,13 +39,13 @@ function addFontToList(font, callback) {
     getFontList(function (err, list) {
         if (err) {
             if (err.type == 'NotFoundError') {
-                list = {};
+                list = [];
             } else {
                 return callback(err);
             }
         }
 
-        list[fontView.hash] = fontView;
+        list.push(fontView);
         put(FONT_LIST_KEY, list, callback);
     });
 }

@@ -1,6 +1,8 @@
 <h2>Font List</h2>
 <div id="font-list">
     <ul>
-        <li>Font A: </li>
+        <li ng-repeat="font in fontList">
+            <a href="#/font/{{ font.hash }}">{{ font.name }}</a>
+        </li>
     </ul>
 </div>

@@ -1,6 +1,6 @@
-fontSubsetterControllers.controller('UploadController', ["$scope", "$http",
+fontSubsetterControllers.controller('UploadController', ["$scope", "$http", "FontInfoService",
 
-    function UploadController($scope, $http) {
+    function UploadController($scope, $http, FontInfoService) {
 
         var worker = new Worker("worker.js");
         $scope.fontInfo = null;
@@ -9,33 +9,13 @@ fontSubsetterControllers.controller('UploadController', ["$scope", "$http",
 
             var hash = event.data.hash;
             var file = event.data.file;
-            var fontUrl = "/font/" + hash;
-            $http({
-                method: "POST",
-                url: fontUrl,
-                headers: {
-                    'Content-Type': undefined
-                },
-                data: {
-                    font: file
-                },
-                transformRequest: function (data) {
-                    var fd = new FormData();
-                    angular.forEach(data, function (value, key) {
-                        fd.append(key, value);
-                    });
-                    return fd;
-                }
-            }).success(function (data, status, headers, config) {
-                $http({
-                    method: "GET",
-                    url: fontUrl
-                }).success(function (data, status, headers, config) {
+            FontInfoService.uploadFont(hash, file).then(function (data) {
+                FontInfoService.getFontInfo(hash).then(function (data) {
                     $scope.fontInfo = data;
-                }).error(function (data, status, headers, config) {
+                }, function (data) {
                     alert(data.message);
                 });
-            }).error(function (data, status, headers, config) {
+            }, function (data) {
                 alert(data.message);
             });
         }

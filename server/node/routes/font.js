@@ -101,17 +101,26 @@ router.post('/:hash', function (req, res, next) {
                         return next(err);
                     }
 
-                    fontModel.saveFont(hash, function (err) {
-                        if (err) {
-                            isReturned = true;
+                    fontModel.getFontInfoFromDb(hash, function (err, info) {
+                        if (info) {
+                            var err = new Error("Font has already existed.");
+                            err.status = 406;
                             return next(err);
                         }
 
-                        console.log(__filename + ": " + "successfully Processed font with hash" + hash);
-                        res.json({
-                            "status": 200,
-                            "message": "upload successfully"
+                        fontModel.saveFont(hash, function (err) {
+                            if (err) {
+                                isReturned = true;
+                                return next(err);
+                            }
+
+                            console.log(__filename + ": " + "successfully Processed font with hash" + hash);
+                            res.json({
+                                "status": 200,
+                                "message": "upload successfully"
+                            });
                         });
+
                     });
                 });
             });

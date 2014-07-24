@@ -1,0 +1,26 @@
+<div id="subset-generator">
+    <h2>Gen Subset</h2>
+    <p>Before using this generator, please read the "LicenseDescription" of the font info below, and make sure you have the right to generate the subset.</p>
+    <div id="subset-input-form" class="subset-input-form">
+        <p><textarea id="subset-input" cols="80" rows="5"></textarea></p>
+        <p><input type="button" value="gen subset" /></p>
+    </div>
+</div>
+<div id="subset-result">
+    <h2>Subset Preview</h2>
+</div>
+<div id="font-info">
+    <h2>Font Info</h2>
+    <div ng-if="fontInfo" class="font-info-cointainer">
+        <table>
+            <thead>
+                <td>Key</td>
+                <td>Value</td>
+            </thead>
+            <tr ng-repeat="(key, value) in fontInfo">
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

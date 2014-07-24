@@ -3,3 +3,4 @@ server/java/target
 lib
 *.log
 font
+server/db
