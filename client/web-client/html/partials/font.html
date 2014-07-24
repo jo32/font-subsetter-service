@@ -3,15 +3,25 @@
     <p>Before using this generator, please read the "LicenseDescription" of the font info below, and make sure you have the right to generate the subset.</p>
     <div id="subset-input-form" class="subset-input-form">
         <p><textarea id="subset-input" cols="80" rows="5"></textarea></p>
-        <p><input type="button" value="gen subset" /></p>
+        <p><input type="button" ng-click="genSubset()" value="gen subset" /></p>
     </div>
 </div>
-<div id="subset-result">
+<div ng-if="subset" id="subset-result">
     <h2>Subset Preview</h2>
+    <div class="subset-result">
+        <h3>Chars Preview</h3>
+        <div id="chars-preview-container" class="chars-preview-container">
+            {{ chars }}
+        </div>
+        <h3>Font Download</h3>
+        <ul>
+            <li ng-repeat="(key, value) in subset"><a data-ng-href="data:application/x-font-{{ key }};charset=utf-8;base64,{{value}}" target="_blank" download="font.{{ key }}">{{ key }} format</a></li>
+        </ul>
+    </div>
 </div>
-<div id="font-info">
+<div ng-if="fontInfo" id="font-info">
     <h2>Font Info</h2>
-    <div ng-if="fontInfo" class="font-info-cointainer">
+    <div class="font-info-cointainer">
         <table>
             <thead>
                 <td>Key</td>

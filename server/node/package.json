@@ -16,6 +16,7 @@
         "thrift": "~0.9.1",
         "leveldown": "~0.10.2",
         "levelup": "~0.18.5",
-        "connect-busboy": "~0.0.1"
+        "connect-busboy": "~0.0.1",
+        "async": "~0.9.0"
     }
 }

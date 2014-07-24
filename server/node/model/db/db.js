@@ -32,6 +32,7 @@ function getFontList(callback) {
 }
 
 function addFontToList(font, callback) {
+
     var fontView = {};
     fontView.hash = font.hash;
     fontView.name = font.FullFontName;
@@ -51,6 +52,7 @@ function addFontToList(font, callback) {
 }
 
 function addFont(font, callback) {
+
     put("font-" + font.hash, font, function (err) {
         if (err) {
             return callback(err);

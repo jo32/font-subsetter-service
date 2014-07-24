@@ -3,6 +3,10 @@ var router = express.Router();
 var busboy = require('connect-busboy');
 var fontModel = require('../model/font/font');
 
+var RouterExtension = require('../model/lib/RouterExtension');
+RouterExtension.extendRouterParam(router);
+
+router.param('hash', /\w+/);
 router.get('/', function (req, res, next) {
     // Get all fonts as a list
 
@@ -19,7 +23,8 @@ router.get('/', function (req, res, next) {
 router.get('/:hash', function (req, res, next) {
     // Get the detail of a font according to its id
 
-    var hash = req.params.hash;
+    var hash = req.params.hash[0];
+
     fontModel.getFontInfoFromDb(hash, function (err, info) {
         if (err) {
             return next(err);
@@ -38,7 +43,8 @@ router.post('/:hash', function (req, res, next) {
     // Needed parameters:
     // 1. hash: of the current font
 
-    var hash = req.params.hash;
+    var hash = req.params.hash[0];
+
     console.log(__filename + ": " + "Got expecting hash: " + hash);
     var validator = fontModel.getFontHashValidator(hash);
     var tempFontWriter = fontModel.getTempFontWriter(hash, function (err, writer) {

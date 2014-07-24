@@ -16,6 +16,7 @@ A web service that help you generate a subset the a font used to embed on your w
 1. sfntly: https://code.google.com/p/sfntly/
 2. Express: http://expressjs.com/
 3. Thrift: http://thrift.apache.org/
+4. Maven 3
 
 
 ## Installation Guide

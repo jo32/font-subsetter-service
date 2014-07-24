@@ -4,11 +4,31 @@ var fontSubsetter = angular.module("fontSubsetter", [
     'fontSubsetterControllers'
 ]);
 
+fontSubsetter.config([
+    '$compileProvider',
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(data:application\/x-font-|http|https|ftp|mailto)/);
+    }
+]);
+
 fontSubsetter.filter('slice', function () {
     return function (arr, start, pageSize) {
         return (arr || []).slice(start, start + pageSize);
     };
 });
+
+fontSubsetter.service('CssService', [
+
+    function CssService() {
+
+        this.addRule = function (text) {
+            var s = document.createElement('style');
+            s.type = "text/css";
+            s.innerHTML = text;
+            document.getElementsByTagName('head')[0].appendChild(s);
+        }
+    }
+]);
 
 fontSubsetter.service('FontInfoService', ["$q", "$http",
     function FontInfoService($q, $http) {
@@ -59,6 +79,22 @@ fontSubsetter.service('FontInfoService', ["$q", "$http",
             $http({
                 method: "GET",
                 url: '/font'
+            }).success(function (data, status, headers, config) {
+                deffered.resolve(data, status, headers, config);
+            }).error(function (data, status, headers, config) {
+                deffered.reject(data, status, headers, config);
+            });
+            return deffered.promise;
+        }
+
+        this.genSubset = function (hash, chars) {
+            var deffered = $q.defer();
+            $http({
+                method: "GET",
+                url: '/subset/' + hash,
+                params: {
+                    'chars': chars
+                },
             }).success(function (data, status, headers, config) {
                 deffered.resolve(data, status, headers, config);
             }).error(function (data, status, headers, config) {
