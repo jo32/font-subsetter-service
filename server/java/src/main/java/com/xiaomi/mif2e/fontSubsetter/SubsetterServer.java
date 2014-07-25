@@ -33,7 +33,7 @@ public class SubsetterServer {
 		try {
 			TServerTransport serverTransport = new TServerSocket(10090);
 			TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(
-					serverTransport).processor(processor));
+					serverTransport).maxWorkerThreads(10).minWorkerThreads(2).processor(processor));
 			System.out.println("Starting the TThreadPoolServer...");
 			server.serve();
 		} catch (Exception e) {
