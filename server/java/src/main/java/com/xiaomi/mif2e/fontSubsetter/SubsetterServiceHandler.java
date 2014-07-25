@@ -20,13 +20,13 @@ public class SubsetterServiceHandler implements Iface {
 			Font newFont = Util.subset(fontFile, subset);
 			for (FileType type : types) {
 				if (type == FileType.TTF) {
-					File outputFile = new File(outputDir + "ttf.ttf");
+					File outputFile = new File(outputDir, "ttf.ttf");
 					Util.saveAsTtf(outputFile, newFont);
 				} else if (type == FileType.EOT) {
-					File outputFile = new File(outputDir + "eot.eot");
+					File outputFile = new File(outputDir, "eot.eot");
 					Util.saveAsEot(outputFile, newFont, false);
 				} else if (type == FileType.WOFF) {
-					File outputFile = new File(outputDir + "woff.woff");
+					File outputFile = new File(outputDir, "woff.woff");
 					Util.saveAsWoff(outputFile, newFont);
 				}
 			}
