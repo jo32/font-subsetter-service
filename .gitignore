@@ -2,5 +2,5 @@ server/java/target
 **/node_modules
 lib
 *.log
-font
+server/font
 server/db
