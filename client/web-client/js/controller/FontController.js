@@ -4,7 +4,7 @@ fontSubsetterControllers.controller('FontController', ["$timeout", "$http", "$sc
 
         var STYLE_TEMPLATE = "@font-face{font-family:'%family-name%';src:url(data:application/x-font-ttf;charset=utf-8;base64,%base64%) format('woff')}";
 
-        var hash = $routeParams.hash;
+        var hash = $scope.hash = $routeParams.hash;
         $scope.chars = null;
         $scope.subset = null;
         $scope.fontInfo = null;

@@ -13,6 +13,9 @@
         <div id="chars-preview-container" class="chars-preview-container">
             {{ chars }}
         </div>
+        <h3>Copy Css</h3>
+        <p>With 'font-family' name: {{ hash }}</p>
+        <textarea cols="80" rows="5">@font-face{font-family:'{{ hash }}';src:url(data:application/x-font-ttf;charset=utf-8;base64,{{ subset.woff }}) format('woff'),url(data:application/x-font-ttf;charset=utf-8;base64,{{ subset.eot }}) format('eot'),url(data:application/x-font-ttf;charset=utf-8;base64,{{ subset.ttf }}) format('truetype')}</textarea>
         <h3>Font Download</h3>
         <ul>
             <li ng-repeat="(key, value) in subset"><a data-ng-href="data:application/x-font-{{ key }};charset=utf-8;base64,{{value}}" target="_blank" download="font.{{ key }}">{{ key }} format</a></li>
