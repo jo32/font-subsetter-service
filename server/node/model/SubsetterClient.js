@@ -5,7 +5,14 @@ var types = require('../../thrift/gen-nodejs/subsetter_types');
 var transport = thrift.TBufferedTransport();
 var protocol = thrift.TBinaryProtocol();
 
+var liveConnections = 0;
+
 function getInstance(callback) {
+
+    if (liveConnections >= 10) {
+        var err = new Error("Too much connections.");
+        return callback(err);
+    }
 
     var connection = thrift.createConnection("localhost", 10090, {
         transport: transport,
@@ -27,8 +34,10 @@ function getInstance(callback) {
     connection.on('connect', function () {
         var client = thrift.createClient(SubsetterService, connection);
         client.end = function () {
+            liveConnections -= 1;
             connection.end();
         }
+        liveConnections += 1;
         return callback(null, client);
     });
 }

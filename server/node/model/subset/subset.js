@@ -60,6 +60,7 @@ function genSubsetFilesAndSaveToTempFolder(hash, chars, callback) {
                     path.join(subsetTempFolder, 'ttf.ttf')
                 ];
 
+                client.end();
                 return callback(null, files);
             });
         });
