@@ -1,4 +1,3 @@
 #/bin/bash
-cwd=`pwd`
-jarname=`find $cwd/lib/font-subsetter-*-jar-with-dependencies.jar`;
+jarname=`find $PROJECT_ROOT/lib/font-subsetter-*-jar-with-dependencies.jar`;
 java -jar $jarname
