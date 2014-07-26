@@ -4,10 +4,22 @@ fontSubsetterControllers.controller('FontListController', ["$http", "$scope", "F
 
         $scope.fontList = [];
 
-        FontInfoService.getFontList().then(function (data) {
-            $scope.fontList = data;
-        }, function (data) {
-            alert(data.message);
-        });
+        function getFontList() {
+            FontInfoService.getFontList().then(function (data) {
+                $scope.fontList = data;
+            }, function (data) {
+                alert(data.message);
+            });
+        }
+        getFontList();
+
+        $scope.delete = function (index) {
+            var fontView = $scope.fontList[index];
+            FontInfoService.deleteFont(fontView.hash).then(function (data) {
+                getFontList();
+            }, function (data) {
+                alert(data.message);
+            });
+        }
     }
 ]);

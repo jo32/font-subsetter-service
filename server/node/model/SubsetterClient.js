@@ -16,6 +16,10 @@ function getInstance(callback) {
      * WARNING: timeout is not handled, should add event mechanism later.
      */
 
+    connection.on('timeout', function (err) {
+        return callback(err);
+    });
+
     connection.on('error', function (err) {
         return callback(err);
     });

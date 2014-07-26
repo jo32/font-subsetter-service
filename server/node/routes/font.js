@@ -35,6 +35,22 @@ router.get('/:hash', function (req, res, next) {
     });
 });
 
+router.delete('/:hash', function (req, res, next) {
+    // delete a font
+
+    var hash = req.params.hash[0];
+    fontModel.deleteFont(hash, function (err) {
+        if (err) {
+            return next(err);
+        }
+
+        res.json({
+            "status": 200,
+            "message": "successfully delete font with hash: " + hash
+        });
+    });
+});
+
 // super kengdie
 router.use('/', busboy());
 router.post('/:hash', function (req, res, next) {

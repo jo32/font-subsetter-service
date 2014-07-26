@@ -2,7 +2,7 @@
 <div id="font-list">
     <ul>
         <li ng-repeat="font in fontList">
-            <a href="#/font/{{ font.hash }}">{{ font.name }}</a>
+            <a href="#/font/{{ font.hash }}">{{ font.name }}</a> (<a href="javascript: void(0);" ng-click="delete($index)">delete</a>)
         </li>
     </ul>
 </div>

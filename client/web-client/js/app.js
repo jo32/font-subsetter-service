@@ -74,6 +74,20 @@ fontSubsetter.service('FontInfoService', ["$q", "$http",
             return deffered.promise;
         }
 
+        this.deleteFont = function (hash) {
+            var fontUrl = "/font/" + hash;
+            var deffered = $q.defer();
+            $http({
+                method: "DELETE",
+                url: fontUrl
+            }).success(function (data, status, headers, config) {
+                deffered.resolve(data, status, headers, config);
+            }).error(function (data, status, headers, config) {
+                deffered.reject(data, status, headers, config);
+            });
+            return deffered.promise;
+        }
+
         this.getFontList = function () {
             var deffered = $q.defer();
             $http({

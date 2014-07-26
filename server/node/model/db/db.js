@@ -8,7 +8,7 @@ var dbFolder = path.resolve(
 );
 var db = levelup(dbFolder);
 
-var FONT_LIST_KEY = "font-list";
+var FONT_SET_KEY = "font-set";
 
 function get(key, callback) {
     db.get(key, function (err, value) {
@@ -27,27 +27,60 @@ function put(key, value, callback) {
     db.put(key, value, callback);
 }
 
-function getFontList(callback) {
-    get(FONT_LIST_KEY, callback);
+function del(key, callback) {
+    db.del(key, callback);
 }
 
-function addFontToList(font, callback) {
+function getFontSet(callback) {
+    get(FONT_SET_KEY, callback);
+}
+
+function getFontList(callback) {
+    getFontSet(function (err, set) {
+        if (err) {
+            return callback(err);
+        }
+
+        var list = [];
+        for (var i in set) {
+            list.push(set[i]);
+            list.sort(function (a, b) {
+                return a.name < b.name ? -1 : (a.name == b.name ? 0 : 1);
+            });
+        }
+
+        return callback(null, list);
+    });
+}
+
+function addFontToSet(font, callback) {
 
     var fontView = {};
     fontView.hash = font.hash;
     fontView.name = font.FullFontName;
 
-    getFontList(function (err, list) {
+    getFontSet(function (err, set) {
         if (err) {
             if (err.type == 'NotFoundError') {
-                list = [];
+                set = {};
             } else {
                 return callback(err);
             }
         }
 
-        list.push(fontView);
-        put(FONT_LIST_KEY, list, callback);
+        set[fontView.hash] = fontView;
+        put(FONT_SET_KEY, set, callback);
+    });
+}
+
+function removeFontFromSet(hash, callback) {
+    getFontSet(function (err, set) {
+        if (err) {
+            return callback(err);
+        }
+
+        delete set[hash];
+        put(FONT_SET_KEY, set, callback);
     });
 }
 
@@ -58,13 +91,25 @@ function addFont(font, callback) {
             return callback(err);
         }
 
-        addFontToList(font, callback);
+        addFontToSet(font, callback);
     });
 }
 
 function getFont(hash, callback) {
 
     get("font-" + hash, callback);
+}
+
+function removeFont(hash, callback) {
+
+    del("font-" + hash, function (err) {
+        if (err) {
+            return callback(err);
+        }
+
+        removeFontFromSet(hash, callback);
+    });
+
 }
 
 function getDb() {
@@ -75,6 +120,7 @@ module.exports = {
 
     "addFont": addFont,
     "getFont": getFont,
+    "removeFont": removeFont,
     "getFontList": getFontList,
     "getDb": getDb
 }
