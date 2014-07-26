@@ -9,3 +9,5 @@ cp $jarname lib/;
 
 (cd server/node; npm install);
 (cd server/thrift/gen-nodejs; npm install);
+(cd client/web-client/; npm install; grunt prod);
+mkdir server/font;

@@ -1,2 +1,3 @@
 #/bin/bash
-node server/node/bin/www
+cwd=`$pwd`
+node $pwd/server/node/bin/www
