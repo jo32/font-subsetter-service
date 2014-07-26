@@ -1,6 +1,6 @@
 server/java/target
 **/node_modules
-lib
+lib/**.jar
 *.log
 server/font
 server/db
