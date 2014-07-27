@@ -13,7 +13,7 @@ public class SubsetterServiceHandler implements Iface {
 
 	@Override
 	public void genSubset(String filePath, String outputDir, String subset,
-			List<FileType> types) throws IOException, TException {
+			List<FileType> types) throws TException {
 
 		System.out.println("Received file to subset: " + filePath);
 		System.out.println("Chars to genSubset: " + subset);
@@ -33,7 +33,7 @@ public class SubsetterServiceHandler implements Iface {
 					Util.saveAsWoff(outputFile, newFont);
 				}
 			}
-		} catch (java.io.IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IOException(ExceptionType.IO, e.getMessage());
 		}
@@ -48,13 +48,12 @@ public class SubsetterServiceHandler implements Iface {
 		System.out.println("Getting the info of file: " + filePath);
 
 		try {
+			System.out.println("Finished getting the info of file: " + filePath);
 			return Util.getFontInfo(filePath);
-		} catch (java.io.IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IOException(ExceptionType.IO, e.getMessage());
 		}
-
-		System.out.println("Finished getting the info of file: " + filePath);
 
 	}
 
